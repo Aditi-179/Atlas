@@ -1,20 +1,23 @@
-from app.models.predict import predictor
+from app.models.unified_predictor import predictor
+from app.features.risk_engine.schemas import RiskPredictionInput
 from .schemas import SimulationInput, SimulationOutput
 
 class BehavioralSimService:
     def run_simulation(self, data: SimulationInput) -> SimulationOutput:
-        # 1. Get Current Risk
-        current_data = data.current_state.model_dump()
-        current_prob, _ = predictor.predict(current_data)
+        # 1. Get Current Risk using unified predictor
+        current_result = predictor.predict_dynamic(data.current_state)
+        current_prob = current_result['probability']
 
         # 2. Create Simulated State (Copy current, then override with changes)
-        simulated_data = current_data.copy()
+        simulated_data = data.current_state.model_dump()
         for key, value in data.modified_habits.items():
             if key in simulated_data:
                 simulated_data[key] = value
         
-        # 3. Get Simulated Risk
-        sim_prob, _ = predictor.predict(simulated_data)
+        # 3. Get Simulated Risk - create a new RiskPredictionInput from modified data
+        simulated_input = RiskPredictionInput(**simulated_data)
+        sim_result = predictor.predict_dynamic(simulated_input)
+        sim_prob = sim_result['probability']
 
         # 4. Calculate Difference
         reduction = current_prob - sim_prob

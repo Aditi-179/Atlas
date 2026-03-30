@@ -1,8 +1,13 @@
 import pandas as pd
 import os
 from fastapi import APIRouter
+from .service import pop_service
 
 router = APIRouter()
+
+@router.get("/stats")
+async def get_population_stats():
+    return pop_service.get_stats()
 
 @router.get("/raw-stats")
 async def get_raw_csv_stats():
