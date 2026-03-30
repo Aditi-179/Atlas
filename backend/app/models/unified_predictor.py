@@ -5,7 +5,6 @@ import shap
 import logging
 import numpy as np
 from app.features.risk_engine.schemas import RiskPredictionInput
-from app.core.database import predictions_collection
 from app.models.db_models import create_prediction_doc
 
 # Setup logging to see errors in terminal

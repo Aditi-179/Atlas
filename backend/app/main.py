@@ -35,12 +35,11 @@ app.include_router(
     prefix=f"{settings.API_V1_STR}/decision-support", 
     tags=["Decision Support"]
 )
-# Broken import fixed temporarily
-# app.include_router(
-#     risk_router, 
-#     prefix=f"{settings.API_V1_STR}/risk-engine", 
-#     tags=["Risk Engine"]
-# )
+app.include_router(
+    risk_router, 
+    prefix=f"{settings.API_V1_STR}/risk-engine", 
+    tags=["Risk Engine"]
+)
 
 # Mobile & Auth Routers
 app.include_router(
