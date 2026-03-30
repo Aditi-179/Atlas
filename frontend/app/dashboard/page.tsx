@@ -100,39 +100,39 @@ export default function DashboardPage() {
         <div className="space-y-3">
           {loading
             ? Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-16 rounded-2xl bg-white/50 animate-pulse" />
-              ))
+              <div key={i} className="h-16 rounded-2xl bg-white/50 animate-pulse" />
+            ))
             : top.map((patient) => {
-                const patientId = encodeURIComponent(patient.Patient_Name as string)
-                const factors = getRiskFactors(patient as unknown as Record<string, number | string>)
-                return (
-                  <motion.article
-                    key={patientId}
-                    whileHover={{ y: -4, boxShadow: "0 14px 28px rgba(15,23,42,0.08)" }}
-                    transition={SPRING}
-                    className="rounded-2xl bg-white/85 px-4 py-4 md:px-5"
-                  >
-                    <div className="grid items-center gap-3 md:grid-cols-[auto_1fr_auto]">
-                      <div className="h-11 w-11 rounded-full bg-[#0d9488]/80 shadow-[0_0_20px_rgba(13,148,136,0.4)]" />
-                      <div>
-                        <p className="font-semibold">{patient.Patient_Name}</p>
-                        <p className="text-sm text-[#0f172a]/65">{patient.City} · Age {patient.Age_Group}</p>
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {factors.slice(0, 3).map((f) => (
-                            <span key={f} className="rounded-full bg-[#0d9488]/12 px-2 py-0.5 text-xs">{f}</span>
-                          ))}
-                        </div>
+              const patientId = encodeURIComponent(patient.Patient_Name as string)
+              const factors = getRiskFactors(patient as unknown as Record<string, number | string>)
+              return (
+                <motion.article
+                  key={patientId}
+                  whileHover={{ y: -4, boxShadow: "0 14px 28px rgba(15,23,42,0.08)" }}
+                  transition={SPRING}
+                  className="rounded-2xl bg-white/85 px-4 py-4 md:px-5"
+                >
+                  <div className="grid items-center gap-3 md:grid-cols-[auto_1fr_auto]">
+                    <div className="h-11 w-11 rounded-full bg-[#0d9488]/80 shadow-[0_0_20px_rgba(13,148,136,0.4)]" />
+                    <div>
+                      <p className="font-semibold">{patient.Patient_Name}</p>
+                      <p className="text-sm text-[#0f172a]/65">{patient.City} · Age {patient.Age_Group}</p>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {factors.slice(0, 3).map((f) => (
+                          <span key={f} className="rounded-full bg-[#0d9488]/12 px-2 py-0.5 text-xs">{f}</span>
+                        ))}
                       </div>
-                      <Link
-                        href={`/patients/${patientId}`}
-                        className="rounded-full bg-[#0d9488] px-4 py-2 text-sm text-white"
-                      >
-                        Open Quick Sheet
-                      </Link>
                     </div>
-                  </motion.article>
-                )
-              })}
+                    <Link
+                      href={`/patients/${patientId}`}
+                      className="rounded-full bg-[#0d9488] px-4 py-2 text-sm text-white"
+                    >
+                      Open Quick Sheet
+                    </Link>
+                  </div>
+                </motion.article>
+              )
+            })}
         </div>
       </section>
 
@@ -158,8 +158,8 @@ export default function DashboardPage() {
                 <span className="inline-block px-3 py-1 rounded-full bg-primary/15 text-primary font-medium">📈 AI insights</span>
               </div>
             </div>
-            <Link 
-              href="/dashboard/population-health" 
+            <Link
+              href="/dashboard/population-health"
               className="rounded-full bg-primary px-6 py-2 text-sm text-primary-foreground font-semibold hover:bg-primary/90 transition flex-shrink-0"
             >
               Open Analytics →

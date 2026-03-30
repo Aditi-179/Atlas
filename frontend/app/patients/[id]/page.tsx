@@ -157,8 +157,8 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
             <h3 className="font-semibold mb-3">Top Risk Drivers (AI Explanation)</h3>
             <div className="space-y-2">
               {riskResult.top_contributors.map((c, i) => {
-                const impact = typeof c === "object" && "impact" in c ? (c as { feature: string; impact: number }).impact : 0
-                const feat = typeof c === "object" && "feature" in c ? (c as { feature: string; impact: number }).feature : String(c)
+                const impact = typeof c === "object" && "impact" in c ? (c as unknown as { feature: string; impact: number }).impact : 0
+                const feat = typeof c === "object" && "feature" in c ? (c as unknown as { feature: string; impact: number }).feature : String(c)
                 const pct = Math.min(Math.abs(impact * 100), 100)
                 return (
                   <div key={i} className="flex items-center gap-3">
