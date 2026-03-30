@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aegis Health OS 🛡️ - Advanced Population Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 p-4 lg:p-8 font-sans overflow-x-hidden">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-10 border-b border-slate-800 pb-6">
+            <div>
+                <h1 class="text-4xl font-black text-blue-500 uppercase tracking-tighter">NGO COMMAND CENTER 📊</h1>
+                <p class="text-slate-400">Advanced Analytics: Population Risk & Action List</p>
+            </div>
+            <a href="index.html"
+                class="bg-slate-800 border border-slate-700 px-6 py-3 rounded-2xl text-xs font-bold hover:bg-slate-700 transition uppercase">Back
+                to Intake</a>
+        </header>
+
+        <!-- Top KPIs (General Averages) -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
+                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Population Size</div>
+                <div id="statTotal" class="text-4xl font-black">--</div>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
+                <div class="text-[10px] text-red-500 font-bold uppercase tracking-widest">Avg Clinical Burden</div>
+                <div id="statBurden" class="text-4xl font-black text-red-500">--</div>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
+                <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">Avg Healthy Habits</div>
+                <div id="statHabits" class="text-4xl font-black text-emerald-400">--</div>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
+                <div class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Avg BMI</div>
+                <div id="statBMI" class="text-4xl font-black text-blue-400">--</div>
+            </div>
+        </div>
+
+        <!-- NEW: Specific Risk Tier Callouts -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- Critical (Red) -->
+            <div
+                class="bg-[#1e293b] p-8 rounded-2xl border border-slate-700 relative overflow-hidden flex flex-col justify-center shadow-xl">
+                <div class="absolute right-0 top-0 bottom-0 w-2.5 bg-red-500"></div>
+                <div class="text-[10px] text-red-500 font-bold uppercase tracking-widest mb-1">Critical (Red)</div>
+                <div id="statRed" class="text-6xl font-black text-red-500">--</div>
+            </div>
+            <!-- At Risk (Yellow) -->
+            <div
+                class="bg-[#1e293b] p-8 rounded-2xl border border-slate-700 relative overflow-hidden flex flex-col justify-center shadow-xl">
+                <div class="absolute right-0 top-0 bottom-0 w-2.5 bg-yellow-500"></div>
+                <div class="text-[10px] text-yellow-500 font-bold uppercase tracking-widest mb-1">At Risk (Yellow)</div>
+                <div id="statYellow" class="text-6xl font-black text-yellow-500">--</div>
+            </div>
+            <!-- Stable (Green) -->
+            <div
+                class="bg-[#1e293b] p-8 rounded-2xl border border-slate-700 relative overflow-hidden flex flex-col justify-center shadow-xl">
+                <div class="absolute right-0 top-0 bottom-0 w-2.5 bg-emerald-500"></div>
+                <div class="text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-1">Stable (Green)</div>
+                <div id="statGreen" class="text-6xl font-black text-emerald-500">--</div>
+            </div>
+        </div>
+
+        <!-- Risk Distribution & Determinants Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 flex flex-col items-center justify-center">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 w-full text-left">Risk
+                    Distribution Pyramid</h3>
+                <div class="relative w-full max-w-[250px] aspect-square">
+                    <canvas id="chartRisk"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Top Risk Determinants</h3>
+                <div class="relative w-full h-[250px]">
+                    <canvas id="chartDeterminants"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytical Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+            <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700">
+                <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Age vs. Metabolic Risk
+                    Index</h3>
+                <canvas id="chartAge"></canvas>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700">
+                <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Income Level vs.
+                    Mobility Risk</h3>
+                <canvas id="chartIncome"></canvas>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700">
+                <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Community Lifestyle
+                    Profile</h3>
+                <canvas id="chartLifestyle"></canvas>
+            </div>
+        </div>
+
+        <!-- Top 10 High-Risk Patients Table -->
+        <div class="bg-slate-800 rounded-3xl border border-slate-700 overflow-hidden shadow-2xl mb-12">
+            <div class="p-6 border-b border-slate-700 bg-slate-800/80">
+                <h3 class="font-bold text-slate-200">Top 10 High-Risk Patients</h3>
+                <p class="text-xs text-slate-500">Patients requiring immediate triage and intervention</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-900/50 text-[10px] text-slate-500 uppercase font-black tracking-widest">
+                        <tr>
+                            <th class="p-5 pl-8">Patient</th>
+                            <th class="p-5">Age</th>
+                            <th class="p-5">City</th>
+                            <th class="p-5">Risk Score</th>
+                            <th class="p-5">Trend</th>
+                            <th class="p-5 pr-8">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientTableBody" class="text-sm divide-y divide-slate-700/50 bg-slate-800">
+                        <!-- JS injects rows here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mockNames = ["Rahul Shah", "Mohan Choudhury", "Naresh Shah", "Sunita Bhat", "Harish Pillai", "Kiran Choudhury", "Amit Patel", "Priya Singh", "Vikram Rao", "Neha Gupta"];
+        const mockCities = ["Ahmedabad", "Jaipur", "Mumbai", "Kolkata", "Chennai", "Chennai", "Delhi", "Pune", "Bengaluru", "Surat"];
+
+        function generateSparkline(isCritical) {
+            const pts = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10) + (isCritical ? 0 : 5));
+            const color = isCritical ? '#10b981' : '#f59e0b';
+            return `<svg width="60" height="15" viewBox="0 0 60 15" class="overflow-visible"><polyline points="0,${pts[0]} 12,${pts[1]} 24,${pts[2]} 36,${pts[3]} 48,${pts[4]} 60,${pts[5]}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        }
+
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = 'Inter, sans-serif';
+
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/v1/population-health/raw-stats');
+                if (!response.ok) throw new Error("Could not fetch CSV stats");
+                const data = await response.json();
+
+                const total = data.length;
+
+                // Populate Top KPIs (Averages)
+                document.getElementById('statTotal').innerText = total.toLocaleString();
+                document.getElementById('statBMI').innerText = (data.reduce((a, c) => a + c.BMI, 0) / total).toFixed(1);
+                document.getElementById('statBurden').innerText = (data.reduce((a, c) => a + c.Clinical_Burden, 0) / total).toFixed(2);
+                document.getElementById('statHabits').innerText = (data.reduce((a, c) => a + c.Healthy_Habits_Score, 0) / total).toFixed(2);
+
+                // Calculations for Risk Tiers
+                const red = data.filter(d => d.Metabolic_Risk_Index > 250).length;
+                const yellow = data.filter(d => d.Metabolic_Risk_Index > 150 && d.Metabolic_Risk_Index <= 250).length;
+                const green = total - red - yellow;
+
+                // NEW: Populate Specific Risk Tier Status Cards
+                document.getElementById('statRed').innerText = red.toLocaleString();
+                document.getElementById('statYellow').innerText = yellow.toLocaleString();
+                document.getElementById('statGreen').innerText = green.toLocaleString();
+
+                // Risk Distribution Pyramid (Doughnut)
+                new Chart(document.getElementById('chartRisk'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: [`Critical (${Math.round(red / total * 100)}%)`, `At Risk (${Math.round(yellow / total * 100)}%)`, `Stable (${Math.round(green / total * 100)}%)`],
+                        datasets: [{
+                            data: [red, yellow, green],
+                            backgroundColor: ['#ef4444', '#f59e0b', '#10b981'],
+                            borderWidth: 4,
+                            borderColor: '#1e293b',
+                            cutout: '65%'
+                        }]
+                    },
+                    options: { plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } } }, maintainAspectRatio: false }
+                });
+
+                // Top Risk Determinants (Horizontal Bar)
+                const determinants = [
+                    { label: 'Smoking', count: data.filter(d => d.Smoker === 1).length, color: '#ef4444' },
+                    { label: 'High BMI (>25)', count: data.filter(d => d.BMI > 25).length, color: '#f59e0b' },
+                    { label: 'Hypertension', count: data.filter(d => d.HighBP === 1).length, color: '#fb7185' },
+                    { label: 'Low Activity', count: data.filter(d => d.PhysActivity === 0).length, color: '#fcd34d' },
+                    { label: 'Poor Diet', count: data.filter(d => d.Veggies === 0 && d.Fruits === 0).length, color: '#64748b' }
+                ].sort((a, b) => b.count - a.count);
+
+                new Chart(document.getElementById('chartDeterminants'), {
+                    type: 'bar',
+                    data: { labels: determinants.map(d => d.label), datasets: [{ data: determinants.map(d => Math.round((d.count / total) * 100)), backgroundColor: determinants.map(d => d.color), borderRadius: 4, barPercentage: 0.6 }] },
+                    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, max: 100, ticks: { callback: v => v + '%' } }, y: { grid: { display: false }, border: { display: false } } }, maintainAspectRatio: false }
+                });
+
+                // Analytical Charts
+                const ageBuckets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+                new Chart(document.getElementById('chartAge'), {
+                    type: 'line',
+                    data: { labels: ageBuckets.map(a => "Cd " + a), datasets: [{ label: 'Avg Metabolic Index', data: ageBuckets.map(a => { const s = data.filter(d => d.Age === a); return s.length ? s.reduce((acc, c) => acc + c.Metabolic_Risk_Index, 0) / s.length : 0; }), borderColor: '#3b82f6', tension: 0.4 }] },
+                    options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#334155' } }, x: { grid: { display: false } } } }
+                });
+
+                const incB = [1, 2, 3, 4, 5, 6, 7, 8];
+                new Chart(document.getElementById('chartIncome'), {
+                    type: 'bar',
+                    data: { labels: incB.map(i => "Lvl " + i), datasets: [{ label: 'Mobility Risk', data: incB.map(i => { const s = data.filter(d => d.Income === i); return s.length ? s.reduce((acc, c) => acc + c.Physical_Mobility_Risk, 0) / s.length : 0; }), backgroundColor: '#8b5cf6', borderRadius: 4 }] },
+                    options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#334155' } }, x: { grid: { display: false } } } }
+                });
+
+                new Chart(document.getElementById('chartLifestyle'), {
+                    type: 'radar',
+                    data: { labels: ['High BP', 'High Chol', 'Smoker', 'Activity', 'Veggies'], datasets: [{ label: 'Prevalence %', data: [(data.filter(d => d.HighBP).length / total) * 100, (data.filter(d => d.HighChol).length / total) * 100, (data.filter(d => d.Smoker).length / total) * 100, (data.filter(d => d.PhysActivity).length / total) * 100, (data.filter(d => d.Veggies).length / total) * 100], backgroundColor: 'rgba(59, 130, 246, 0.2)', borderColor: '#3b82f6', pointBackgroundColor: '#60a5fa' }] },
+                    options: { plugins: { legend: { display: false } }, scales: { r: { grid: { color: '#334155' }, angleLines: { color: '#334155' }, ticks: { display: false } } } }
+                });
+
+                // Top 10 High-Risk Patients Table
+                const sortedData = [...data].sort((a, b) => b.Metabolic_Risk_Index - a.Metabolic_Risk_Index).slice(0, 10);
+                const tableBody = document.getElementById('patientTableBody');
+                tableBody.innerHTML = "";
+
+                sortedData.forEach((patient, index) => {
+                    const name = mockNames[index];
+                    const initials = name.split(' ').map(n => n[0]).join('');
+                    const city = mockCities[index];
+                    const age = (patient.Age * 5) + 15 + Math.floor(Math.random() * 4);
+                    const riskScore = Math.min(99, 85 + Math.floor(patient.Metabolic_Risk_Index / 50));
+
+                    const isCritical = riskScore >= 90;
+                    const badgeClass = isCritical ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+                    const badgeText = isCritical ? 'Critical' : 'High Risk';
+                    const scoreColor = isCritical ? 'text-red-500' : 'text-yellow-500';
+
+                    tableBody.innerHTML += `
+                        <tr class="hover:bg-slate-700/30 transition-colors group">
+                            <td class="p-5 pl-8 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 group-hover:bg-blue-600 transition-colors">${initials}</div>
+                                <div><div class="font-bold text-slate-200">${name}</div><div class="text-[10px] text-slate-500 font-mono">P0${10 + index}</div></div>
+                            </td>
+                            <td class="p-5 text-slate-300 font-medium">${age}</td>
+                            <td class="p-5 text-slate-400">${city}</td>
+                            <td class="p-5 font-black ${scoreColor}">${riskScore}%</td>
+                            <td class="p-5">${generateSparkline(isCritical)}</td>
+                            <td class="p-5 pr-8"><span class="px-3 py-1 rounded-full text-[10px] font-bold border ${badgeClass} uppercase tracking-widest">${badgeText}</span></td>
+                        </tr>
+                    `;
+                });
+
+            } catch (err) {
+                console.error("Dashboard Error:", err);
+                document.getElementById('statTotal').innerText = "ERROR";
+            }
+        }
+
+        window.onload = loadAnalytics;
+    </script>
+</body>
+
+</html>

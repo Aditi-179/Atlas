@@ -7,9 +7,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "data", "ncd_dataset_final_clean.csv")
-MODEL_PATH = os.path.join(BASE_DIR, "artifacts", "xgb_model.pkl")
-COLUMNS_PATH = os.path.join(BASE_DIR, "artifacts", "xgb_columns.pkl")
+DATA_PATH = os.path.join(BASE_DIR, "../data", "ncd_dataset_final_clean.csv")
+MODEL_PATH = os.path.join(BASE_DIR, "../artifacts", "xgb_model.pkl")
+COLUMNS_PATH = os.path.join(BASE_DIR, "../artifacts", "xgb_columns.pkl")
 
 
 # ---------------------------
@@ -21,7 +21,7 @@ def train_xgboost():
     df = pd.read_csv(DATA_PATH)
     features = [
         'HighBP', 'HighChol', 'BMI', 'Smoker', 'PhysActivity', 
-        'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Age', 
+        'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Age', 'Sex',
         'Education', 'Income', 'Metabolic_Risk_Index', 'Clinical_Burden', 
         'Healthy_Habits_Score', 'Unhealthy_Lifestyle_Index', 'Physical_Mobility_Risk'
     ]

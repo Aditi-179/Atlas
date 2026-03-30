@@ -23,9 +23,9 @@ def train_model():
     # 2. Select the 10 features defined in your cleaning script
     features = [
         'HighBP', 'HighChol', 'BMI', 'Smoker', 'PhysActivity', 
-        'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Age', 
+        'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Age', 'Sex',
         'Education', 'Income', 'Metabolic_Risk_Index', 'Clinical_Burden', 
-        'Healthy_Habits_Score', 'Unhealthy_Lifestyle_Index', 'Physical_Mobility_Risk'
+        'Healthy_Habits_Score', 'Unhealthy_Lifestyle_Index', 'Physical_Mobility_Risk',
     ]
     target = 'NCD_Risk'
 

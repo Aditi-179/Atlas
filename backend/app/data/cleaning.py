@@ -23,7 +23,7 @@ print(f"Level 1: Removed {initial_rows - len(merged_df)} exact duplicates.")
 # These columns don't help predict biological risk; they are "Noise".
 cols_to_drop = [
     'CholCheck', 'AnyHealthcare', 'NoDocbcCost', 
-    'Sex', 'GenHlth', 'MentHlth', 'PhysHlth', 'Stroke'
+    'GenHlth', 'MentHlth', 'PhysHlth', 'Stroke'
 ]
 merged_df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
 

@@ -11,7 +11,7 @@ class DecisionSupportService:
 
     def generate_protocol(self, data: PatientClinicalData) -> ClinicalProtocolOutput:
         prompt = f"""
-        You are Aegis Health OS, a clinical decision support AI.
+        You are CareFlow AI, a clinical decision support AI.
         Generate a strictly formatted JSON medical protocol for this patient.
         
         Patient Data:

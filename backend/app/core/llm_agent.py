@@ -4,7 +4,7 @@ from app.core.config import settings
 
 class GroqAgent:
     """
-    Centralized Core LLM Agent for Aegis Health OS.
+    Centralized Core LLM Agent for CareFlow AI.
     Can be imported by any feature module that requires AI reasoning.
     """
     def __init__(self):
