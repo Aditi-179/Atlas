@@ -1,33 +1,58 @@
 import pandas as pd
 import pickle
 from faker import Faker
+import os
 
 fake = Faker()
 
-# 1. Load your master data and take a sample (e.g., 1000 rows) for the demo
-df = pd.read_csv('data/master_ncd_data.csv').sample(1000, random_state=42)
+# 1. Load your master data
+# Taking a sample of 1000 for the demo dashboard
+df = pd.read_csv('ncd_dataset_final_clean.csv').sample(1000, random_state=42)
 
-# 2. THE 5-LINE HYBRID HACK: Generate Names, Phones, and Locations
+# 2. THE HYBRID HACK: Generate Names, Phones, and Locations
 df['Patient_Name'] = [fake.name() for _ in range(len(df))]
-df['Phone_Number'] = [f"+91 {fake.msisdn()[3:]}" for _ in range(len(df))] # Indian-style numbers
+df['Phone_Number'] = [f"+91 {fake.msisdn()[3:]}" for _ in range(len(df))] 
 df['City'] = [fake.city() for _ in range(len(df))]
 
-# 3. ATTACH THE AI SCORES: Load your models and calculate risk
-# (Replace these filenames with your actual .pkl names)
-dia_model = pickle.load(open('models/diabetes_model.pkl', 'rb'))
-hrt_model = pickle.load(open('models/heart_model.pkl', 'rb'))
-gen_model = pickle.load(open('models/general_ncd_model.pkl', 'rb'))
+# 3. LOAD THE UNIFIED XGBOOST MODEL & COLUMNS
+# Assuming files are in the 'models' folder
+model_path = '../models/artifacts/xgb_model.pkl'
+columns_path = '../models/artifacts/xgb_columns.pkl'
 
-# Select only the features the models were trained on (X)
-features = ['HighBP', 'HighChol', 'BMI', 'DiffWalk', 'Smoker', 'PhysActivity', 'Veggies', 'HvyAlcoholConsump', 'Income', 'Education']
-X = df[features]
+with open(model_path, 'rb') as f:
+    xgb_model = pickle.load(f)
 
-# Add the real AI risk probabilities to the CSV
-df['Diabetes_Risk'] = (dia_model.predict_proba(X)[:, 1] * 100).round(1)
-df['Heart_Risk'] = (hrt_model.predict_proba(X)[:, 1] * 100).round(1)
-df['Overall_NCD_Risk'] = (gen_model.predict_proba(X)[:, 1] * 100).round(1)
+with open(columns_path, 'rb') as f:
+    trained_columns = pickle.load(f)
 
-# 4. Save this specifically for your UI/Frontend
-df.to_csv('data/ui_final_demo_data.csv', index=False)
+# 4. ALIGN DATA & CALCULATE RISK
+# We use the 'trained_columns' list to ensure X matches the model perfectly
+X = df[trained_columns]
 
-print("Done! 'ui_final_demo_data.csv' is ready for your Streamlit UI.")
+# Calculate Overall NCD Risk probability (0-100 scale)
+# predict_proba returns [prob_of_0, prob_of_1] -> we take index 1
+df['Overall_NCD_Risk'] = (xgb_model.predict_proba(X)[:, 1] * 100).round(1)
+
+# 5. UI ENHANCEMENTS: Map Age and Gender for Next.js Display
+def map_age(val):
+    age_map = {
+        1: "18-24", 2: "25-29", 3: "30-34", 4: "35-39", 5: "40-44",
+        6: "45-49", 7: "50-54", 8: "55-59", 9: "60-64", 10: "65-69",
+        11: "70-74", 12: "75-79", 13: "80+"
+    }
+    return age_map.get(val, "Unknown")
+
+# Create readable columns for the frontend
+if 'Age' in df.columns:
+    df['Age_Group'] = df['Age'].apply(map_age)
+
+if 'Sex' in df.columns:
+    df['Gender'] = df['Sex'].map({0: "Female", 1: "Male"})
+
+# 6. Save final demo CSV
+os.makedirs('data', exist_ok=True)
+df.to_csv('ui_final_demo_data.csv', index=False)
+
+print("✅ Success! 'ui_final_demo_data.csv' is ready for your Next.js frontend.")
+print(f"Features used by model: {trained_columns}")
+print(f"Sample Risk Score: {df['Overall_NCD_Risk'].iloc[0]}%")

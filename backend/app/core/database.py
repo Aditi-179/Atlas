@@ -1,21 +1,21 @@
-from pymongo import MongoClient
-import os
-from dotenv import load_dotenv
-from urllib.parse import urlparse
+from motor.motor_asyncio import AsyncIOMotorClient
+from app.core.config import settings
 
-load_dotenv()
+# Initialize MongoDB client
+try:
+    client = AsyncIOMotorClient(settings.MONGO_URI, serverSelectionTimeoutMS=5000)
+    db = client.aegis # Database name 'aegis'
+    print("MongoDB connection established successfully.")
+except Exception as e:
+    print(f"Error connecting to MongoDB: {e}")
+    db = None
 
-MONGO_URI = os.getenv("MONGO_URI")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
-
-if not MONGO_URI:
-	raise ValueError("MONGO_URI is missing in environment")
-
-uri_db_name = urlparse(MONGO_URI).path.lstrip("/")
-db_name = MONGO_DB_NAME or uri_db_name or "aegis_db"
-
-client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
-db = client[db_name]
-
-# Collections
-predictions_collection = db["predictions"]
+# Async helper to check ping
+async def ping_db():
+    if client:
+        try:
+            await client.admin.command('ping')
+            return True
+        except Exception:
+            return False
+    return False

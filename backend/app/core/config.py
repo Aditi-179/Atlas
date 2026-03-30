@@ -18,5 +18,11 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
 
+    # Database & Authentication
+    MONGO_URI: str
+    SECRET_KEY: str = "super_secret_aegis_key_change_in_prod" # Used a default if not in env
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # Keep logged in for 7 days
+
 # 3. Initialize (Pydantic will now read seamlessly from the OS environment)
 settings = Settings()
