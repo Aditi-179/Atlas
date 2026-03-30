@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { LandingPage } from "@/components/careflow/landing-page"
 import { AppSidebar } from "@/components/careflow/app-sidebar"
 import { MacroRadar } from "@/components/careflow/macro-radar"
@@ -13,6 +14,7 @@ import { Brain, ArrowLeft } from "lucide-react"
 type Role = "NGO Admin" | "Field Worker"
 
 export default function CareFlowApp() {
+  const router = useRouter()
   const [showDashboard, setShowDashboard] = useState(false)
   const [activeView, setActiveView] = useState("dashboard")
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
@@ -38,8 +40,8 @@ export default function CareFlowApp() {
   }, [])
 
   const handleEnterDashboard = useCallback(() => {
-    setShowDashboard(true)
-  }, [])
+    router.push("/signup")
+  }, [router])
 
   const handleBackToLanding = useCallback(() => {
     setShowDashboard(false)
