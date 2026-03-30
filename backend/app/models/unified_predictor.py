@@ -3,7 +3,10 @@ import joblib
 import pandas as pd
 import shap
 import logging
+import numpy as np
 from app.features.risk_engine.schemas import RiskPredictionInput
+from app.core.database import predictions_collection
+from app.models.db_models import create_prediction_doc
 
 # Setup logging to see errors in terminal
 logging.basicConfig(level=logging.INFO)
@@ -69,13 +72,47 @@ class UnifiedPredictor:
             
             # 4. Inference
             prob = float(model.predict_proba(df)[0][1])
+
+            # 5. SHAP explainability for top predictive drivers
+            top_contributors = []
+            if self.xgb_explainer is not None and model == self.xgb_model:
+                try:
+                    shap_values = self.xgb_explainer.shap_values(df)
+
+                    # Handle SHAP outputs across versions/models.
+                    # Expected final vector shape: (n_features,)
+                    if isinstance(shap_values, list):
+                        shap_vector = np.array(shap_values[-1][0])
+                    else:
+                        arr = np.array(shap_values)
+                        if arr.ndim == 3:
+                            # Binary class tree models can return [samples, features, classes]
+                            shap_vector = arr[0, :, -1]
+                        elif arr.ndim == 2:
+                            shap_vector = arr[0]
+                        else:
+                            shap_vector = arr.reshape(-1)
+
+                    contributors = [
+                        {
+                            "feature": str(col),
+                            "impact": float(shap_vector[idx])
+                        }
+                        for idx, col in enumerate(df.columns)
+                    ]
+
+                    contributors.sort(key=lambda item: abs(item["impact"]), reverse=True)
+                    top_contributors = contributors[:6]
+                except Exception as shap_error:
+                    logger.warning(f"SHAP generation failed: {shap_error}")
+                    
             
             return {
                 "probability": prob,
                 "risk_score": round(prob * 100, 2),
                 "model_used": name,
                 "accuracy": self.xgb_acc if self.xgb_acc > self.rf_acc else self.rf_acc,
-                "top_contributors": [] # Placeholder for now
+                "top_contributors": top_contributors
             }
         except Exception as e:
             logger.error(f"❌ Prediction Error: {e}")

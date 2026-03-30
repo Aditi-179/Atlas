@@ -1,5 +1,10 @@
 from pydantic import BaseModel, Field
-from typing import List, Dict
+from typing import List
+
+
+class RiskContributor(BaseModel):
+    feature: str
+    impact: float
 
 class RiskPredictionInput(BaseModel):
     # Clinical Features
@@ -27,4 +32,4 @@ class RiskPredictionOutput(BaseModel):
     model_used: str
     accuracy_at_training: float
     # SHAP Explainability
-    top_contributors: List[Dict[str, float]]
+    top_contributors: List[RiskContributor]
