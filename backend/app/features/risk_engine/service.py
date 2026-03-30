@@ -12,7 +12,7 @@ class RiskEngineService:
 
         # --- NEW: SAVE TO POPULATION DATABASE ---
         save_data = {**result, "Age": data.Age, "risk_tier": tier}
-        await pop_service.save_patient_result(save_data)
+        pop_service.save_patient_result(save_data)
         
         return RiskPredictionOutput(
             risk_probability=result['probability'],
