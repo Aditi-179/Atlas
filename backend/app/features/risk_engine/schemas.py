@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List, Dict
 
 class RiskPredictionInput(BaseModel):
     # Clinical Features
@@ -7,7 +8,7 @@ class RiskPredictionInput(BaseModel):
     BMI: float = Field(..., ge=10.0, le=60.0)
     DiffWalk: int = Field(..., description="1 = Difficulty Walking, 0 = No")
     Age: int
-    Sex: int
+    Sex: int = Field(..., description="1 = Male, 0 = Female") # <--- ADDED
 
 
     # Behavioral Features
@@ -21,7 +22,9 @@ class RiskPredictionInput(BaseModel):
     Education: int = Field(..., ge=1, le=6, description="Education Scale (1-6)")
 
 class RiskPredictionOutput(BaseModel):
-    risk_probability: float
+    risk_score: float
     risk_tier: str
-    model_used:str
-    
+    model_used: str
+    accuracy_at_training: float
+    # SHAP Explainability
+    top_contributors: List[Dict[str, float]]

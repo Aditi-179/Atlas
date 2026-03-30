@@ -10,7 +10,7 @@ env_path = os.path.abspath(os.path.join(current_dir, "../../.env"))
 load_dotenv(dotenv_path=env_path)
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Aegis Health OS"
+    PROJECT_NAME: str = "CareFlow AI"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     

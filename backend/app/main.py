@@ -6,12 +6,13 @@ from fastapi.responses import RedirectResponse
 
 # Import Domain Routers
 from app.features.decision_support.router import router as decision_support_router
-# from app.features.risk_engine.router import router as risk_engine_router
+from app.features.risk_engine.router import router as risk_router
+from app.features.population_health.router import router as pop_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Backend API for Aegis Health OS 🛡️"
+    description="Backend API for CareFlow AI 🛡️"
 )
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -36,6 +37,13 @@ app.include_router(
     prefix=f"{settings.API_V1_STR}/risk-engine", 
     tags=["Risk Engine"]
 )
+
+app.include_router(
+    pop_router, 
+    prefix=f"{settings.API_V1_STR}/population-health", 
+    tags=["Population Health"]
+)
+
 @app.get("/health", tags=["System"])
 def health_check():
     return {"status": "operational", "system": settings.PROJECT_NAME}
