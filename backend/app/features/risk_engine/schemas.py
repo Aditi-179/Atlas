@@ -6,6 +6,9 @@ class RiskPredictionInput(BaseModel):
     HighChol: int = Field(..., description="1 = High Cholesterol, 0 = Normal")
     BMI: float = Field(..., ge=10.0, le=60.0)
     DiffWalk: int = Field(..., description="1 = Difficulty Walking, 0 = No")
+    Age: int
+    Sex: int
+
 
     # Behavioral Features
     Smoker: int = Field(..., description="1 = Current/Former, 0 = Never")

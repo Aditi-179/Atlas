@@ -31,7 +31,11 @@ app.include_router(
     prefix=f"{settings.API_V1_STR}/decision-support", 
     tags=["Decision Support"]
 )
-
+app.include_router(
+    risk_router, 
+    prefix=f"{settings.API_V1_STR}/risk-engine", 
+    tags=["Risk Engine"]
+)
 @app.get("/health", tags=["System"])
 def health_check():
     return {"status": "operational", "system": settings.PROJECT_NAME}
