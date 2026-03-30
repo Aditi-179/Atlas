@@ -6,7 +6,7 @@ class PatientClinicalData(BaseModel):
     age: int
     gender: str
     vitals: Dict[str, Any] = Field(..., example={"systolic_bp": 145, "bmi": 28})
-    habits: Dict[str, str] = Field(..., example={"smoking": "current", "diet": "high_sodium"})
+    habits: Dict[str, Any] = Field(..., example={"smoking": "current", "diet": "high_sodium"})
     risk_tier: str = Field(..., example="Red")
 
 class ActionStep(BaseModel):

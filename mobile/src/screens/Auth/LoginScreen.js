@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import useAuthStore from '../../store/useAuthStore';
 import GlassCard from '../../components/GlassCard';
 import Button from '../../components/Button';

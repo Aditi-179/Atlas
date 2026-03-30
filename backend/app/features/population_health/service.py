@@ -3,7 +3,7 @@ from .schemas import PopulationStats
 from app.core.database import db
 import asyncio
 class PopulationHealthService:
-    def save_patient_result(self, risk_data: dict):
+    async def save_patient_result(self, risk_data: dict):
         """Saves a new screening result to MongoDB Atlas."""
         if db is None: return False
         
@@ -18,12 +18,7 @@ class PopulationHealthService:
                 "top_contributors": risk_data.get('top_contributors', [])
             }
 
-            # Fire and forget async DB task from synchronous context
-            try:
-                loop = asyncio.get_running_loop()
-                loop.create_task(db["predictions"].insert_one(record))
-            except RuntimeError:
-                pass # No running loop to schedule it on
+            await db["predictions"].insert_one(record)
             return True
         except Exception as e:
             print(f"Failed to save record: {e}")
