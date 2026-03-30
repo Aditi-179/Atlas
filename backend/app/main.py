@@ -11,7 +11,7 @@ from app.features.population_health.router import router as pop_router
 from app.features.RAG.router import router as rag_router
 from app.features.auth.router import router as auth_router
 from app.features.mobile_api.router import router as mobile_api_router
-
+from app.features.behavioral_sim.router import router as behavioral_sim_router
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
@@ -63,6 +63,12 @@ app.include_router(
     rag_router,
     prefix=f"{settings.API_V1_STR}/rag",
     tags=["RAG NLP Analysis"]
+)
+
+app.include_router(
+    behavioral_sim_router,
+    prefix=f"{settings.API_V1_STR}/behavioral-sim",
+    tags=["Behavioral Simulation"]
 )
 
 @app.get("/health", tags=["System"])

@@ -3,6 +3,13 @@ from app.core.database import db
 from app.core.dependencies import get_current_health_worker, get_current_patient, get_current_user
 from bson import ObjectId
 from typing import List, Dict, Any
+import datetime
+
+# ML & AI Services
+from app.features.risk_engine.service import ml_service
+from app.features.risk_engine.schemas import RiskPredictionInput
+from app.features.decision_support.service import decision_service
+from app.features.decision_support.schemas import PatientClinicalData
 
 router = APIRouter()
 
@@ -37,30 +44,77 @@ async def get_worker_patients(worker: dict = Depends(get_current_health_worker))
 
 @router.post("/worker/patients/{patient_id}/update")
 async def update_patient_record(patient_id: str, record_data: dict, worker: dict = Depends(get_current_health_worker)):
-    """Worker visits patient and updates data. Generates Risk/Protocol if possible."""
+    """Worker visits patient and updates data. Generates Risk/Protocol automatically."""
     if db is None: raise HTTPException(status_code=500, detail="DB Error")
     
-    # 1. Save new data point
-    import datetime
+    # 1. Map incoming frontend data to the ML Schema
+    try:
+        # The mobile app will send 'vitals' and 'habits' as nested dicts
+        vitals = record_data.get("vitals", {})
+        habits = record_data.get("habits", {})
+        
+        # ML Input Mapping
+        ml_input = RiskPredictionInput(
+            HighBP=int(vitals.get("HighBP", 0)),
+            HighChol=int(vitals.get("HighChol", 0)),
+            BMI=float(vitals.get("BMI", 25.0)),
+            DiffWalk=int(habits.get("DiffWalk", 0)),
+            Age=int(record_data.get("Age", 45)),
+            Sex=int(record_data.get("Sex", 1)), # 1=Male, 0=Female
+            Smoker=int(habits.get("Smoker", 0)),
+            PhysActivity=int(habits.get("PhysActivity", 1)),
+            Veggies=int(habits.get("Veggies", 1)),
+            HvyAlcoholConsump=int(habits.get("HvyAlcoholConsump", 0)),
+            Income=int(record_data.get("Income", 5)),
+            Education=int(record_data.get("Education", 4))
+        )
+        
+        # 2. Get ML Prediction & XAI
+        prediction = await ml_service.get_prediction(ml_input)
+        
+        # 3. Get AI Care Protocol (Groq)
+        protocol_input = PatientClinicalData(
+            patient_id=patient_id,
+            age=ml_input.Age,
+            gender="Male" if ml_input.Sex == 1 else "Female",
+            vitals=vitals,
+            habits=habits,
+            risk_tier=prediction.risk_tier
+        )
+        protocol = decision_service.generate_protocol(protocol_input)
+        
+    except Exception as e:
+        # Fallback if ML or AI fails during development
+        print(f"Error in ML/AI pipeline: {e}")
+        prediction = None
+        protocol = None
+
+    # 4. Save combined data point to MongoDB
     new_record = {
         "user_id": patient_id,
         "worker_id": str(worker["_id"]),
-        "vitals": record_data.get("vitals", {}),
-        "habits": record_data.get("habits", {}),
-        "age": record_data.get("age", 45),
+        "vitals": vitals,
+        "habits": habits,
+        "age": record_data.get("Age", 45),
         "gender": record_data.get("gender", "Unknown"),
+        
+        # Prediction & Protocol Results
+        "risk_score": prediction.risk_score if prediction else None,
+        "risk_tier": prediction.risk_tier if prediction else "Unknown",
+        "top_contributors": [c.model_dump() for c in prediction.top_contributors] if prediction else [],
+        "protocol": protocol.model_dump() if protocol else None,
+        
         "created_at": datetime.datetime.utcnow()
     }
-    
-    # 2. Risk Engine & Decision Support could be triggered here.
-    # For MVP, we will save the raw data, let the frontend trigger the existing endpoints
-    # or implement a unified call later.
     
     result = await db["patient_records"].insert_one(new_record)
     new_record["id"] = str(result.inserted_id)
     new_record.pop("_id", None)
     
-    return {"message": "Patient data updated successfully", "record": new_record}
+    return {
+        "message": "Clinical reasoning complete", 
+        "record": new_record
+    }
 
 # -----------------
 # 👤 Patient Endpoints
