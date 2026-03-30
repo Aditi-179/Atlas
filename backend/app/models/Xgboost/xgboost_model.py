@@ -21,7 +21,7 @@ def train_xgboost():
     df = pd.read_csv(DATA_PATH)
     features = [
         'HighBP', 'HighChol', 'BMI', 'Smoker', 'PhysActivity', 
-        'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Age', 
+        'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Age', 'Sex',
         'Education', 'Income', 'Metabolic_Risk_Index', 'Clinical_Burden', 
         'Healthy_Habits_Score', 'Unhealthy_Lifestyle_Index', 'Physical_Mobility_Risk'
     ]
