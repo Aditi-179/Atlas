@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.get("/stats")
 async def get_population_stats():
-    return pop_service.get_stats()
+    return await pop_service.get_stats()
 
 @router.get("/raw-stats")
 async def get_raw_csv_stats():
