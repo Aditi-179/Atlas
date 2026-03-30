@@ -27,8 +27,8 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
   return (
     <AppShell title={patient.name} subtitle={`${patient.village} - Field visit profile`}>
       <div className="space-y-5">
-        <Link href="/field/dashboard" className="inline-flex text-sm text-[#0d9488] hover:underline">
-          Back to My Patients
+        <Link href="/patients" className="inline-flex text-sm text-[#0d9488] hover:underline">
+          Back to Patients
         </Link>
 
         <section className="rounded-2xl bg-white/85 p-4">

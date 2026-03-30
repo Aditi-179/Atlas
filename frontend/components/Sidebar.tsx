@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import { FileText, Home, LogOut, Map, Menu, Settings, Users, X } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
-import { useRole } from "@/components/role-context"
 
 type NavItem = {
   label: string
@@ -19,23 +18,16 @@ const ADMIN_NAV: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: Home },
   { label: "Patients", href: "/patients", icon: Users },
   { label: "Risk Map", href: "/dashboard?view=risk-map", icon: Map },
-  { label: "Reports & Export", href: "/field/visits", icon: FileText },
-  { label: "Settings", href: "/dashboard?view=settings", icon: Settings },
-]
-
-const FIELD_NAV: NavItem[] = [
-  { label: "Dashboard", href: "/field/dashboard", icon: Home },
-  { label: "Patients", href: "/patients", icon: Users },
-  { label: "Reports", href: "/field/visits", icon: FileText },
+  { label: "Reports & Export", href: "/reports", icon: FileText },
+  { label: "Settings", href: "/settings", icon: Settings },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { role } = useRole()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const items = role === "admin" ? ADMIN_NAV : FIELD_NAV
-  const roleLabel = role === "admin" ? "NGO Admin" : "Frontline Health Worker"
-  const person = role === "admin" ? "Aditi Sharma" : "Meena Kumari"
+  const items = ADMIN_NAV
+  const roleLabel = "NGO Admin"
+  const person = "Aditi Sharma"
 
   const NavList = ({ mobile = false }: { mobile?: boolean }) => (
     <nav className="space-y-1.5">
