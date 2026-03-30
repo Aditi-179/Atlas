@@ -9,6 +9,7 @@ from app.features.decision_support.router import router as decision_support_rout
 from app.features.risk_engine.router import router as risk_router
 from app.features.population_health.router import router as pop_router
 from app.features.RAG.router import router as rag_router
+from app.features.behavioral_sim.router import router as sim_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -49,6 +50,12 @@ app.include_router(
     rag_router,
     prefix=f"{settings.API_V1_STR}/rag",
     tags=["RAG NLP Analysis"]
+)
+
+app.include_router(
+    sim_router, 
+    prefix=f"{settings.API_V1_STR}/behavioral-sim", 
+    tags=["Behavioral Simulator"]
 )
 
 @app.get("/health", tags=["System"])
