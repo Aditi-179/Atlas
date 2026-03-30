@@ -2,6 +2,9 @@
 __pycache__/
 # Python virtual environment
 venv/
+.venv/
+**/venv/
+**/.venv/
 # Environment variables file
 .env
 
