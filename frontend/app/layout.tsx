@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Poppins, JetBrains_Mono } from 'next/font/google'
+import { Poppins, JetBrains_Mono, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
@@ -12,6 +12,11 @@ const poppins = Poppins({
 const jetbrainsMono = JetBrains_Mono({ 
   subsets: ["latin"],
   variable: '--font-mono',
+  display: 'swap',
+});
+const playfair = Playfair_Display({ 
+  subsets: ["latin"],
+  variable: '--font-playfair',
   display: 'swap',
 });
 
@@ -45,7 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+      <body className={`${poppins.variable} ${jetbrainsMono.variable} ${playfair.variable} font-sans antialiased`}>
         {children}
         <Analytics />
       </body>

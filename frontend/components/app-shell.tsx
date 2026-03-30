@@ -1,12 +1,9 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Inter, Playfair_Display } from "next/font/google"
 import { Sidebar } from "@/components/Sidebar"
 
 const SPRING = { type: "spring" as const, stiffness: 300, damping: 30 }
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" })
 
 function ShellContent({
   title,
@@ -18,15 +15,15 @@ function ShellContent({
   children: React.ReactNode
 }) {
   return (
-    <div className={`${inter.variable} ${playfair.variable} min-h-screen bg-[#f8f9f8] text-[#0f172a]`}>
+    <div className="min-h-screen bg-background text-foreground">
       <Sidebar />
       <div className="lg:ml-[280px]">
-        <header className="hidden lg:flex sticky top-0 z-20 items-center justify-between border-b border-[#0f172a]/10 bg-[#f8f9f8]/90 px-8 py-4 backdrop-blur">
+        <header className="hidden lg:flex sticky top-0 z-20 items-center justify-between border-b border-border bg-background/90 px-8 py-4 backdrop-blur">
           <div>
             <h1 className="font-[var(--font-playfair)] text-3xl">{title}</h1>
-            {subtitle ? <p className="mt-1 text-sm text-[#0f172a]/65">{subtitle}</p> : null}
+            {subtitle ? <p className="mt-1 text-sm text-foreground/65">{subtitle}</p> : null}
           </div>
-          <p className="text-sm text-[#0f172a]/65">NGO Admin View</p>
+          <p className="text-sm text-foreground/65">NGO Admin View</p>
         </header>
 
         <motion.main
@@ -37,8 +34,8 @@ function ShellContent({
         >
           <div className="mb-4 lg:hidden">
             <h1 className="font-[var(--font-playfair)] text-2xl">{title}</h1>
-            {subtitle ? <p className="mt-1 text-sm text-[#0f172a]/65">{subtitle}</p> : null}
-            <p className="mt-2 text-xs text-[#0f172a]/60">NGO Admin View</p>
+            {subtitle ? <p className="mt-1 text-sm text-foreground/65">{subtitle}</p> : null}
+            <p className="mt-2 text-xs text-foreground/60">NGO Admin View</p>
           </div>
           {children}
         </motion.main>

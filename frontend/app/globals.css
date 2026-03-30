@@ -99,6 +99,7 @@
 @theme inline {
   --font-sans: var(--font-poppins), 'Poppins', system-ui, sans-serif;
   --font-mono: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  --font-playfair: var(--font-playfair), 'Playfair Display', serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -146,6 +147,9 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+  }
+  h1, h2, h3, h4, .font-heading {
+    @apply font-[family-name:var(--font-playfair)] tracking-tight;
   }
 }
 

@@ -65,29 +65,29 @@ export function ShapChart({ patient }: ShapChartProps) {
           <XAxis
             type="number"
             domain={[-30, 30]}
-            tick={{ fontSize: 10, fill: "oklch(0.52 0.02 240)" }}
+            tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
             tickLine={false}
-            axisLine={{ stroke: "oklch(0.91 0.008 220)" }}
+            axisLine={{ stroke: "var(--border)" }}
             tickFormatter={(v) => `${v > 0 ? "+" : ""}${v}%`}
           />
           <YAxis
             type="category"
             dataKey="feature"
             width={130}
-            tick={{ fontSize: 10, fill: "oklch(0.52 0.02 240)" }}
+            tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: "oklch(0.97 0 0 / 0.5)" }} />
-          <ReferenceLine x={0} stroke="oklch(0.91 0.008 220)" strokeWidth={1.5} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--secondary-foreground)", fillOpacity: 0.1 }} />
+          <ReferenceLine x={0} stroke="var(--border)" strokeWidth={1.5} />
           <Bar dataKey="value" radius={[0, 4, 4, 0]}>
             {sorted.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={
                   entry.value > 0
-                    ? "oklch(0.628 0.258 27.325)"
-                    : "oklch(0.56 0.13 186)"
+                    ? "var(--risk-critical)"
+                    : "var(--primary)"
                 }
                 fillOpacity={0.85}
               />

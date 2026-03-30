@@ -40,34 +40,34 @@ export function Sidebar() {
             href={item.href}
             onClick={() => setMobileOpen(false)}
             className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-              active ? "bg-[#0d9488]/10 text-[#0f172a]" : "text-[#0f172a]/70 hover:bg-[#0f172a]/5 hover:text-[#0f172a]"
+              active ? "bg-primary/10 text-foreground" : "text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
             }`}
           >
-            {active ? <span className="absolute inset-y-2 left-0 w-[2px] rounded-r-full bg-[#0d9488]" /> : null}
+            {active ? <span className="absolute inset-y-2 left-0 w-[2px] rounded-r-full bg-primary" /> : null}
             <Icon className="h-4 w-4" />
             {item.label}
           </Link>
         )
       })}
-      {mobile ? null : <div className="pt-2 border-t border-[#0f172a]/10" />}
+      {mobile ? null : <div className="pt-2 border-t border-border" />}
     </nav>
   )
 
   return (
     <>
-      <aside className="hidden lg:flex fixed inset-y-0 left-0 z-30 w-[280px] flex-col border-r border-[#0f172a]/10 bg-[#f8f9f8] px-5 py-6">
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 z-30 w-[280px] flex-col border-r border-border bg-background px-5 py-6">
         <div className="mb-8 flex items-center gap-2">
-          <h2 className="font-[var(--font-playfair)] text-2xl leading-none text-[#0f172a]">CareFlow</h2>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#0d9488]" />
+          <h2 className="font-heading text-2xl leading-none text-foreground">CareFlow</h2>
+          <span className="h-2.5 w-2.5 rounded-full bg-primary" />
         </div>
         <NavList />
 
-        <div className="mt-auto border-t border-[#0f172a]/10 pt-4">
-          <p className="text-sm font-medium text-[#0f172a]">{person}</p>
-          <p className="text-xs text-[#0f172a]/65">{roleLabel}</p>
+        <div className="mt-auto border-t border-border pt-4">
+          <p className="text-sm font-medium text-foreground">{person}</p>
+          <p className="text-xs text-foreground/65">{roleLabel}</p>
           <Link
             href="/"
-            className="mt-3 inline-flex items-center gap-2 text-xs text-[#0f172a]/70 hover:text-[#0f172a]"
+            className="mt-3 inline-flex items-center gap-2 text-xs text-foreground/70 hover:text-foreground"
           >
             <LogOut className="h-3.5 w-3.5" />
             Logout
@@ -75,19 +75,19 @@ export function Sidebar() {
         </div>
       </aside>
 
-      <div className="lg:hidden sticky top-0 z-40 flex items-center justify-between border-b border-[#0f172a]/10 bg-[#f8f9f8]/95 px-4 py-3 backdrop-blur">
+      <div className="lg:hidden sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background/95 px-4 py-3 backdrop-blur">
         <button
           onClick={() => setMobileOpen(true)}
-          className="grid h-10 w-10 place-items-center rounded-full bg-[#0f172a]/5 text-[#0f172a]"
+          className="grid h-10 w-10 place-items-center rounded-full bg-foreground/5 text-foreground"
           aria-label="Open menu"
         >
           <Menu className="h-5 w-5" />
         </button>
         <div className="flex items-center gap-2">
-          <h2 className="font-[var(--font-playfair)] text-xl text-[#0f172a]">CareFlow</h2>
-          <span className="h-2 w-2 rounded-full bg-[#0d9488]" />
+          <h2 className="font-heading text-xl text-foreground">CareFlow</h2>
+          <span className="h-2 w-2 rounded-full bg-primary" />
         </div>
-        <div className="h-10 w-10 rounded-full bg-[#0f172a]/6" />
+        <div className="h-10 w-10 rounded-full bg-foreground/6" />
       </div>
 
       <AnimatePresence>
@@ -98,7 +98,7 @@ export function Sidebar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={SPRING}
-              className="fixed inset-0 z-50 bg-[#0f172a]/30"
+              className="fixed inset-0 z-50 bg-foreground/30"
               onClick={() => setMobileOpen(false)}
             />
             <motion.aside
@@ -106,32 +106,32 @@ export function Sidebar() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={SPRING}
-              className="fixed bottom-0 left-0 top-0 z-50 w-[82%] max-w-[300px] bg-[#f8f9f8] px-4 py-5"
+              className="fixed bottom-0 left-0 top-0 z-50 w-[82%] max-w-[300px] bg-background px-4 py-5"
             >
               <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-[var(--font-playfair)] text-xl">CareFlow</h3>
-                  <span className="h-2 w-2 rounded-full bg-[#0d9488]" />
+                  <h3 className="font-heading text-xl">CareFlow</h3>
+                  <span className="h-2 w-2 rounded-full bg-primary" />
                 </div>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="grid h-9 w-9 place-items-center rounded-full bg-[#0f172a]/5"
+                  className="grid h-9 w-9 place-items-center rounded-full bg-foreground/5"
                   aria-label="Close menu"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
               <NavList mobile />
-              <div className="mt-6 border-t border-[#0f172a]/10 pt-4">
-                <p className="text-sm font-medium text-[#0f172a]">{person}</p>
-                <p className="text-xs text-[#0f172a]/65">{roleLabel}</p>
+              <div className="mt-6 border-t border-border pt-4">
+                <p className="text-sm font-medium text-foreground">{person}</p>
+                <p className="text-xs text-foreground/65">{roleLabel}</p>
               </div>
             </motion.aside>
           </>
         ) : null}
       </AnimatePresence>
 
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-[#0f172a]/10 bg-[#f8f9f8]/95 px-3 py-2 backdrop-blur">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 px-3 py-2 backdrop-blur">
         <div className="mx-auto grid max-w-md grid-cols-3 gap-1">
           {items.slice(0, 3).map((item) => {
             const Icon = item.icon
@@ -141,7 +141,7 @@ export function Sidebar() {
                 key={item.label}
                 href={item.href}
                 className={`flex flex-col items-center rounded-lg px-2 py-2 text-[11px] ${
-                  active ? "text-[#0d9488]" : "text-[#0f172a]/65"
+                  active ? "text-primary" : "text-foreground/65"
                 }`}
               >
                 <Icon className="mb-1 h-4 w-4" />
