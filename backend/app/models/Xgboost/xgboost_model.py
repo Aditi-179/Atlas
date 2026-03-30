@@ -6,9 +6,10 @@ from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-DATA_PATH = "app/data/master_ncd_data.csv"
-MODEL_PATH = "app/models/artifacts/xgb_model.pkl"
-COLUMNS_PATH = "app/models/artifacts/xgb_columns.pkl"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, "data", "ncd_dataset_final_clean.csv")
+MODEL_PATH = os.path.join(BASE_DIR, "artifacts", "xgb_model.pkl")
+COLUMNS_PATH = os.path.join(BASE_DIR, "artifacts", "xgb_columns.pkl")
 
 
 # ---------------------------
@@ -18,13 +19,15 @@ def train_xgboost():
     print("🚀 Training XGBoost...")
 
     df = pd.read_csv(DATA_PATH)
-    df = df.dropna()
-    df = pd.get_dummies(df, drop_first=True)
+    features = [
+        'HighBP', 'HighChol', 'BMI', 'Smoker', 'PhysActivity', 
+        'Fruits', 'Veggies', 'HvyAlcoholConsump', 'DiffWalk', 'Age', 
+        'Education', 'Income', 'Metabolic_Risk_Index', 'Clinical_Burden', 
+        'Healthy_Habits_Score', 'Unhealthy_Lifestyle_Index', 'Physical_Mobility_Risk'
+    ]
+    TARGET = 'NCD_Risk'
 
-    TARGET = "Target_Diabetes"
-
-    # Remove all targets from features
-    X = df.drop(["Target_Heart", "Target_Diabetes", "Target_General_NCD"], axis=1)
+    X = df[features]
     y = df[TARGET]
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -108,3 +111,6 @@ def get_risk_level(prob):
         return "Medium"
     else:
         return "Low"
+
+if __name__ == "__main__":
+    train_xgboost()
