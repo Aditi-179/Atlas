@@ -1,0 +1,20 @@
+Testing RAG with patient risk: 0.88
+
+--- RAG Output JSON ---
+{
+  "analysis_summary": "The patient is at a high risk for Non-Communicable Diseases (NCDs) due to multiple factors including obesity, hypertension, hyperlipidemia, smoking, and physical inactivity. The patient's young age of 4 is concerning given these risk factors, suggesting potential genetic or environmental predispositions that require immediate attention.",
+  "primary_risk_factors": [
+    "Obesity (BMI >= 30)",
+    "Hypertension",
+    "Hyperlipidemia",
+    "Smoking",
+    "Sedentary lifestyle"
+  ],
+  "clinical_guidelines": [
+    "Follow the guideline for obesity: 5-10% weight loss target within 6 months via caloric deficit and a minimum of 150 minutes of moderate-intensity exercise weekly",
+    "Adhere to the DASH diet and severe sodium restriction for hypertension",
+    "Replace saturated fats with polyunsaturated fats and increase soluble fiber intake for hyperlipidemia",
+    "Immediate smoking cessation"
+  ],
+  "recommended_action": "Patient should immediately undergo a comprehensive medical evaluation to address the high NCD risk, focusing on weight management, blood pressure control, cholesterol reduction, smoking cessation, and increased physical activity, considering the patient's unusually young age and high-risk profile."
+}
