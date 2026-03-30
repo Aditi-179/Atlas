@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import useAuthStore from './src/store/useAuthStore';
 import { colors } from './src/theme/colors';
@@ -32,27 +33,29 @@ export default function App() {
     }
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {!token ? (
-                    // Auth Flow
-                    <>
-                        <Stack.Screen name="Login" component={LoginScreen} />
-                        <Stack.Screen name="Register" component={RegisterScreen} />
-                    </>
-                ) : userRole === 'worker' ? (
-                    // Health Worker Flow
-                    <>
-                        <Stack.Screen name="WorkerDashboard" component={WorkerDashboardScreen} />
-                        <Stack.Screen name="PatientVisit" component={PatientVisitScreen} options={{ headerShown: true, title: "Patient Visit" }} />
-                    </>
-                ) : (
-                    // Patient Flow
-                    <>
-                        <Stack.Screen name="PatientHome" component={PatientHomeScreen} />
-                    </>
-                )}
-            </Stack.Navigator>
-        </NavigationContainer>
+        <SafeAreaProvider>
+            <NavigationContainer>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    {!token ? (
+                        // Auth Flow
+                        <>
+                            <Stack.Screen name="Login" component={LoginScreen} />
+                            <Stack.Screen name="Register" component={RegisterScreen} />
+                        </>
+                    ) : userRole === 'worker' ? (
+                        // Health Worker Flow
+                        <>
+                            <Stack.Screen name="WorkerDashboard" component={WorkerDashboardScreen} />
+                            <Stack.Screen name="PatientVisit" component={PatientVisitScreen} options={{ headerShown: true, title: "Patient Visit" }} />
+                        </>
+                    ) : (
+                        // Patient Flow
+                        <>
+                            <Stack.Screen name="PatientHome" component={PatientHomeScreen} />
+                        </>
+                    )}
+                </Stack.Navigator>
+            </NavigationContainer>
+        </SafeAreaProvider>
     );
 }

@@ -3,7 +3,7 @@ from app.features.population_health.service import pop_service # <--- IMPORT THI
 from .schemas import RiskPredictionInput, RiskPredictionOutput
 
 class RiskEngineService:
-    def get_prediction(self, data: RiskPredictionInput) -> RiskPredictionOutput:
+    async def get_prediction(self, data: RiskPredictionInput) -> RiskPredictionOutput:
         result = predictor.predict_dynamic(data)
         
         tier = "Green"
@@ -12,7 +12,7 @@ class RiskEngineService:
 
         # --- NEW: SAVE TO POPULATION DATABASE ---
         save_data = {**result, "Age": data.Age, "risk_tier": tier}
-        pop_service.save_patient_result(save_data)
+        await pop_service.save_patient_result(save_data)
         
         return RiskPredictionOutput(
             risk_probability=result['probability'],

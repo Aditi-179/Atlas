@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import useAuthStore from '../../store/useAuthStore';
 import apiClient from '../../api/client';
 import GlassCard from '../../components/GlassCard';
@@ -69,13 +70,51 @@ const PatientHomeScreen = () => {
 
                         <Text style={styles.sectionTitle}>Latest Vitals</Text>
                         <GlassCard>
-                            {Object.entries(patientData.latest_record.vitals || {}).map(([key, value]) => (
-                                <View key={key} style={styles.row}>
-                                    <Text style={styles.rowKey}>{key.replace('_', ' ').toUpperCase()}</Text>
-                                    <Text style={styles.rowVal}>{value}</Text>
-                                </View>
-                            ))}
+                            <View style={styles.row}>
+                                <Text style={styles.rowKey}>AGE</Text>
+                                <Text style={styles.rowVal}>{patientData.latest_record.age}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.rowKey}>BMI</Text>
+                                <Text style={styles.rowVal}>{patientData.latest_record.vitals?.BMI}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.rowKey}>BLOOD PRESSURE</Text>
+                                <Text style={styles.rowVal}>{patientData.latest_record.vitals?.HighBP ? 'High' : 'Normal'}</Text>
+                            </View>
                         </GlassCard>
+
+                        {patientData.latest_record.top_contributors?.length > 0 && (
+                            <>
+                                <Text style={styles.sectionTitle}>Predictive Drivers (XAI)</Text>
+                                <GlassCard>
+                                    {patientData.latest_record.top_contributors.map((item, idx) => (
+                                        <View key={idx} style={styles.xaiRow}>
+                                            <Text style={styles.xaiFeature}>{item.feature}</Text>
+                                            <View style={[styles.xaiImpactBar, { width: Math.abs(item.impact) * 50, backgroundColor: item.impact > 0 ? colors.critical : colors.stable }]} />
+                                        </View>
+                                    ))}
+                                </GlassCard>
+                            </>
+                        )}
+
+                        {patientData.latest_record.protocol?.protocol_steps?.length > 0 && (
+                            <>
+                                <Text style={styles.sectionTitle}>Your Action Plan</Text>
+                                <View style={styles.protocolContainer}>
+                                    {patientData.latest_record.protocol.protocol_steps.map((step, idx) => (
+                                        <GlassCard key={idx} style={styles.stepCard}>
+                                            <View style={styles.stepHeader}>
+                                                <Text style={styles.stepCategory}>{step.category}</Text>
+                                                <Text style={styles.stepUrgency}>{step.urgency}</Text>
+                                            </View>
+                                            <Text style={styles.stepAction}>{step.action}</Text>
+                                            <Text style={styles.stepCitation}>Source: {step.evidence_citation}</Text>
+                                        </GlassCard>
+                                    ))}
+                                </View>
+                            </>
+                        )}
                     </>
                 )}
             </ScrollView>
@@ -96,8 +135,20 @@ const styles = StyleSheet.create({
     riskScore: { fontSize: 16, color: colors.slateDark, marginTop: 8 },
     sectionTitle: { fontSize: 18, fontWeight: '700', color: colors.slateDark, marginBottom: 12, marginTop: 16 },
     row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border },
-    rowKey: { fontSize: 14, color: colors.textSecondary, fontWeight: '600' },
-    rowVal: { fontSize: 16, color: colors.slateDark, fontWeight: 'bold' }
+    rowKey: { fontSize: 13, color: colors.textSecondary, fontWeight: '600' },
+    rowVal: { fontSize: 16, color: colors.slateDark, fontWeight: 'bold' },
+    
+    // XAI & Protocol Styles
+    xaiRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 6 },
+    xaiFeature: { fontSize: 13, color: colors.textPrimary, flex: 1 },
+    xaiImpactBar: { height: 8, borderRadius: 4 },
+    protocolContainer: { marginBottom: 20 },
+    stepCard: { padding: 12, marginBottom: 12 },
+    stepHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
+    stepCategory: { fontSize: 11, fontWeight: 'bold', color: colors.primaryTeal, textTransform: 'uppercase' },
+    stepUrgency: { fontSize: 10, fontWeight: 'bold', color: colors.critical, textTransform: 'uppercase' },
+    stepAction: { fontSize: 14, color: colors.textPrimary, fontWeight: '500', marginBottom: 8 },
+    stepCitation: { fontSize: 10, color: colors.textSecondary, fontStyle: 'italic' }
 });
 
 export default PatientHomeScreen;
