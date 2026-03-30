@@ -7,6 +7,7 @@ import Button from '../../components/Button';
 import { colors } from '../../theme/colors';
 import { Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import BehavioralSimSection from '../../components/BehavioralSimSection';
 
 const PatientVisitScreen = ({ route, navigation }) => {
     const { patient } = route.params;
@@ -30,6 +31,8 @@ const PatientVisitScreen = ({ route, navigation }) => {
     
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState(null);
+    // currentStateForSim stores the submitted data so the simulator can reuse it
+    const [simCurrentState, setSimCurrentState] = useState(null);
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -56,6 +59,21 @@ const PatientVisitScreen = ({ route, navigation }) => {
 
             const response = await apiClient.post(`/mobile/worker/patients/${patient.id}/update`, payload);
             setResults(response.data.record);
+            // Save state so the Simulator can reuse
+            setSimCurrentState({
+                Age: parseInt(age),
+                Sex: sex,
+                BMI: parseFloat(bmi),
+                Income: parseInt(income),
+                Education: parseInt(education),
+                HighBP: highBp ? 1 : 0,
+                HighChol: highChol ? 1 : 0,
+                Smoker: smoker ? 1 : 0,
+                Veggies: veggies ? 1 : 0,
+                PhysActivity: physActivity ? 1 : 0,
+                HvyAlcoholConsump: hvyAlcohol ? 1 : 0,
+                DiffWalk: diffWalk ? 1 : 0,
+            });
             Alert.alert("Reasoning Complete", "Patient clinical result generated successfully.");
         } catch (error) {
             Alert.alert("Error", "Failed to update record. " + (error.response?.data?.detail || ""));
@@ -145,7 +163,7 @@ const PatientVisitScreen = ({ route, navigation }) => {
                                 <Text style={[styles.riskTierLarge, { color: results.risk_tier === 'Red' ? colors.critical : (results.risk_tier === 'Yellow' ? colors.warning : colors.stable) }]}>
                                     {results.risk_tier}
                                 </Text>
-                                <Text style={styles.riskScoreSub}>Severity Score: {Math.round(results.risk_score)}%</Text>
+                                <Text style={styles.riskScoreSub}>Severity Score: {results.risk_score.toFixed(2)}%</Text>
                             </GlassCard>
 
                             <Text style={styles.sectionHeader}>Predictive Drivers (XAI)</Text>
@@ -172,7 +190,9 @@ const PatientVisitScreen = ({ route, navigation }) => {
                                 ))}
                             </View>
 
-                            <Button title="Back to Patient List" variant="secondary" onPress={() => navigation.goBack()} />
+                            <BehavioralSimSection currentState={simCurrentState} />
+
+                            <Button title="Back to Patient List" variant="secondary" onPress={() => navigation.goBack()} style={{ marginTop: 16 }} />
                         </View>
                     )}
                 </ScrollView>
