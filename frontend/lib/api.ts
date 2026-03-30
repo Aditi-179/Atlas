@@ -6,12 +6,6 @@ import {
   RAGPatientHealthData,
   RAGInsightResponse,
   PatientRecord,
-  UserRegister,
-  UserLogin,
-  Token,
-  MobilePatientData,
-  MobileRecordUpdate,
-  PatientProfile
 } from './types';
 
 // Assuming the FastAPI backend runs on localhost:8000
@@ -63,8 +57,10 @@ export const api = {
   async getPopulationStats(): Promise<PatientRecord[]> {
     const res = await fetch(`${API_BASE_URL}/population-health/raw-stats`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
     if (!res.ok) throw new Error("Failed to fetch population stats");
     return res.json();
-  }
+  },
+
+};

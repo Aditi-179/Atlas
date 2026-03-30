@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { cn } from "@/lib/utils"
 import { type Patient } from "@/lib/mock-data"
+import { api } from "@/lib/api"
 import { retrieveGuidelines, type GuidelineEntry } from "@/lib/guidelines"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
@@ -185,10 +186,51 @@ export function CopilotSidebar({
       setIsGenerating(true)
       scrollToBottom()
 
-      // Simulate RAG retrieval delay
-      await new Promise((r) => setTimeout(r, 900))
+      let responseText: string
+      let citations: GuidelineEntry[] = []
 
-      const { text: responseText, citations } = generateResponse(text, patient)
+      try {
+        // --- Real RAG API call ---
+        const ragResult = await api.generateRagInsights({
+          bmi: patient?.vitals.bmi.value ?? 25,
+          age: patient?.age ?? 40,
+          high_bp: (patient?.vitals.bloodPressure.systolic ?? 0) >= 130 ? 1 : 0,
+          high_chol: patient?.shapFeatures.some(
+            (f) => f.feature.toLowerCase().includes("chol") && f.value > 0
+          ) ? 1 : 0,
+          smoker: patient?.shapFeatures.some(
+            (f) => f.feature.toLowerCase().includes("smok") && f.value > 0
+          ) ? 1 : 0,
+          phys_activity: (patient?.vitals.physicalActivity.value ?? 0) >= 90 ? 1 : 0,
+          hvy_alcohol: 0,
+          ncd_risk_probability: (patient?.riskScore ?? 50) / 100,
+          risk_tier:
+            patient?.riskLevel === "critical" ? "High"
+            : patient?.riskLevel === "warning" ? "Medium"
+            : "Low",
+        })
+
+        // Format RAGInsightResponse into a readable message
+        const factors = ragResult.primary_risk_factors.map((f) => `• ${f}`).join("\n")
+        const guidelines = ragResult.clinical_guidelines.map((g) => `• ${g}`).join("\n")
+        responseText =
+          `${ragResult.analysis_summary}` +
+          (factors ? `\n\n**Primary Risk Factors:**\n${factors}` : "") +
+          (guidelines ? `\n\n**Clinical Guidelines:**\n${guidelines}` : "") +
+          `\n\n**Recommended Action:** ${ragResult.recommended_action}`
+
+        // Pull local citations for enrichment
+        citations = retrieveGuidelines(
+          text + (patient ? ` ${patient.primaryRiskFactor} BMI ${patient.vitals.bmi.value}` : ""),
+          2
+        )
+      } catch {
+        // Fallback to local mock if backend is unavailable
+        const fallback = generateResponse(text, patient)
+        responseText = fallback.text
+        citations = fallback.citations
+      }
+
       const assistantMsg: Message = {
         id: `ai-${Date.now()}`,
         role: "assistant",

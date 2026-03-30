@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { useRouter } from "next/navigation"
 import { LandingPage } from "@/components/careflow/landing-page"
 import { AppSidebar } from "@/components/careflow/app-sidebar"
 import { MacroRadar } from "@/components/careflow/macro-radar"
@@ -10,17 +9,18 @@ import { CopilotSidebar } from "@/components/careflow/copilot-sidebar"
 import { type Patient } from "@/lib/mock-data"
 import { Button } from "@/components/ui/button"
 import { Brain, ArrowLeft } from "lucide-react"
+import { usePopulationData } from "@/lib/hooks/usePopulationData"
 
 type Role = "NGO Admin" | "Field Worker"
 
 export default function CareFlowApp() {
-  const router = useRouter()
   const [showDashboard, setShowDashboard] = useState(false)
   const [activeView, setActiveView] = useState("dashboard")
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
   const [copilotOpen, setCopilotOpen] = useState(true)
   const [pendingCopilotMessage, setPendingCopilotMessage] = useState<string | undefined>(undefined)
   const [role, setRole] = useState<Role>("NGO Admin")
+  const { stats, loading: statsLoading } = usePopulationData()
 
   const handleSelectPatient = useCallback((patient: Patient) => {
     setSelectedPatient(patient)
@@ -40,8 +40,8 @@ export default function CareFlowApp() {
   }, [])
 
   const handleEnterDashboard = useCallback(() => {
-    router.push("/signup")
-  }, [router])
+    setShowDashboard(true)
+  }, [])
 
   const handleBackToLanding = useCallback(() => {
     setShowDashboard(false)
@@ -130,7 +130,7 @@ export default function CareFlowApp() {
             />
           ) : activeView === "dashboard" ? (
             <MacroRadar
-              selectedPatientId={selectedPatient?.id ?? null}
+              selectedPatientId={selectedPatient !== null ? (selectedPatient as { id: string }).id : null}
               onSelectPatient={handleSelectPatient}
             />
           ) : activeView === "population" ? (
@@ -139,23 +139,44 @@ export default function CareFlowApp() {
                 <h1 className="text-2xl font-bold text-foreground mb-1">Population Overview</h1>
                 <p className="text-muted-foreground">Comprehensive population health analytics and demographics</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
-                  <p className="text-sm text-muted-foreground mb-2">Total Enrolled</p>
-                  <p className="text-3xl font-bold text-foreground">12,847</p>
-                  <p className="text-xs text-muted-foreground mt-2">Active participants</p>
+              {statsLoading ? (
+                <p className="text-sm text-muted-foreground">Loading population data…</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">Total Screened</p>
+                    <p className="text-3xl font-bold text-foreground">{stats?.totalScreened.toLocaleString() ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">Active participants</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">Average Age</p>
+                    <p className="text-3xl font-bold text-foreground">{stats?.averageAge ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">years</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "300ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">Gender Split</p>
+                    <p className="text-3xl font-bold text-foreground">
+                      {stats ? `${stats.femaleCount}F / ${stats.maleCount}M` : "—"}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2">Female / Male</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "400ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">High NCD Risk</p>
+                    <p className="text-3xl font-bold text-foreground">{stats?.highRiskCount.toLocaleString() ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">patients flagged</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "500ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">Avg NCD Risk Score</p>
+                    <p className="text-3xl font-bold text-foreground">{stats?.averageNcdRisk ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">out of 100</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "600ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">Normal Vitals</p>
+                    <p className="text-3xl font-bold text-foreground">{stats?.normalVitalsCount.toLocaleString() ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">no risk flags</p>
+                  </div>
                 </div>
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
-                  <p className="text-sm text-muted-foreground mb-2">Average Age</p>
-                  <p className="text-3xl font-bold text-foreground">42.3</p>
-                  <p className="text-xs text-muted-foreground mt-2">years</p>
-                </div>
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "300ms" }}>
-                  <p className="text-sm text-muted-foreground mb-2">Gender Distribution</p>
-                  <p className="text-3xl font-bold text-foreground">52/48</p>
-                  <p className="text-xs text-muted-foreground mt-2">F/M ratio</p>
-                </div>
-              </div>
+              )}
             </div>
           ) : activeView === "vitals" ? (
             <div className="animate-fade-in-up space-y-6">
@@ -163,28 +184,32 @@ export default function CareFlowApp() {
                 <h1 className="text-2xl font-bold text-foreground mb-1">Vitals Monitor</h1>
                 <p className="text-muted-foreground">Real-time patient vitals monitoring and trends</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
-                  <p className="text-sm text-muted-foreground mb-2">Blood Pressure (High)</p>
-                  <p className="text-3xl font-bold text-risk-critical">847</p>
-                  <p className="text-xs text-muted-foreground mt-2">patients</p>
+              {statsLoading ? (
+                <p className="text-sm text-muted-foreground">Loading vitals data…</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">Blood Pressure (High)</p>
+                    <p className="text-3xl font-bold text-risk-critical">{stats?.highBPCount.toLocaleString() ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">patients</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">High Cholesterol</p>
+                    <p className="text-3xl font-bold text-risk-warning">{stats?.highCholCount.toLocaleString() ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">patients</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "300ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">BMI (Obese)</p>
+                    <p className="text-3xl font-bold text-primary">{stats?.obeseCount.toLocaleString() ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">patients (BMI ≥ 30)</p>
+                  </div>
+                  <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "400ms" }}>
+                    <p className="text-sm text-muted-foreground mb-2">Normal Vitals</p>
+                    <p className="text-3xl font-bold text-risk-stable">{stats?.normalVitalsCount.toLocaleString() ?? "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-2">patients</p>
+                  </div>
                 </div>
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
-                  <p className="text-sm text-muted-foreground mb-2">Blood Sugar (Abnormal)</p>
-                  <p className="text-3xl font-bold text-risk-warning">623</p>
-                  <p className="text-xs text-muted-foreground mt-2">patients</p>
-                </div>
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "300ms" }}>
-                  <p className="text-sm text-muted-foreground mb-2">BMI (Overweight)</p>
-                  <p className="text-3xl font-bold text-primary">2,156</p>
-                  <p className="text-xs text-muted-foreground mt-2">patients</p>
-                </div>
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "400ms" }}>
-                  <p className="text-sm text-muted-foreground mb-2">Normal Vitals</p>
-                  <p className="text-3xl font-bold text-risk-stable">9,221</p>
-                  <p className="text-xs text-muted-foreground mt-2">patients</p>
-                </div>
-              </div>
+              )}
             </div>
           ) : activeView === "regions" ? (
             <div className="animate-fade-in-up space-y-6">
