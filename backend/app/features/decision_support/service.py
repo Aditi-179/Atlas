@@ -1,3 +1,4 @@
+import json
 from groq import Groq
 from app.core.config import settings
 from .schemas import PatientClinicalData, ClinicalProtocolOutput
