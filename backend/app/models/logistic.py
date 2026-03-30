@@ -6,7 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-DATA_PATH = "app/data/master_ncd_data.csv"
+DATA_PATH = "app/data/ncd_dataset_final_clean.csv"
 MODEL_PATH = "app/models/logistic_model.pkl"
 COLUMNS_PATH = "app/models/columns.pkl"
 

@@ -1,4 +1,4 @@
-from app.models.predict import predictor
+from backend.app.models.RadomForest.predict import predictor
 from .schemas import RiskPredictionInput, RiskPredictionOutput
 
 class RiskEngineService:
