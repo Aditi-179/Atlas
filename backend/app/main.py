@@ -7,6 +7,8 @@ from fastapi.responses import RedirectResponse
 # Import Domain Routers
 from app.features.decision_support.router import router as decision_support_router
 # from app.features.risk_engine.router import router as risk_engine_router
+from app.features.auth.router import router as auth_router
+from app.features.mobile_api.router import router as mobile_api_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -31,10 +33,23 @@ app.include_router(
     prefix=f"{settings.API_V1_STR}/decision-support", 
     tags=["Decision Support"]
 )
+# Broken import fixed temporarily
+# app.include_router(
+#     risk_router, 
+#     prefix=f"{settings.API_V1_STR}/risk-engine", 
+#     tags=["Risk Engine"]
+# )
+
+# Mobile & Auth Routers
 app.include_router(
-    risk_router, 
-    prefix=f"{settings.API_V1_STR}/risk-engine", 
-    tags=["Risk Engine"]
+    auth_router,
+    prefix=f"{settings.API_V1_STR}/auth",
+    tags=["Authentication"]
+)
+app.include_router(
+    mobile_api_router,
+    prefix=f"{settings.API_V1_STR}/mobile",
+    tags=["Mobile App API"]
 )
 @app.get("/health", tags=["System"])
 def health_check():
