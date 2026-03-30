@@ -16,6 +16,7 @@ class PatientHealthData(BaseModel):
     # The output from the XGBoost model
     ncd_risk_probability: float = Field(..., description="Probability of Non-Communicable Disease")
     risk_tier: str = Field(..., description="Risk Tier (e.g., High, Medium, Low)")
+    user_query: Optional[str] = Field(default=None, description="Optional custom prompt to query the copilot")
 
 
 class RAGInsightResponse(BaseModel):

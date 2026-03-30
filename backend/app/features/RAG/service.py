@@ -39,12 +39,18 @@ You MUST respond strictly in a valid JSON format with the following keys exactly
 }}
 """
 
+    user_query = patient_data.get('user_query')
+
     user_prompt = f"""Please analyze the following patient profile.
     
 Patient Data:
 {json.dumps(patient_data, indent=2)}
+"""
 
-Remember to only output the JSON format."""
+    if user_query:
+        user_prompt += f"\n\nThe user specifically asked you (copilot context): '{user_query}'\nPlease tailor your analysis to directly answer this question while strictly following the JSON response structure."
+
+    user_prompt += "\nRemember to only output the valid JSON format."
 
     # 3. Call Core LLM Agent
     try:
