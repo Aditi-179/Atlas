@@ -10,6 +10,7 @@ import { type Patient } from "@/lib/mock-data"
 import { Button } from "@/components/ui/button"
 import { Brain, ArrowLeft } from "lucide-react"
 import { usePopulationData } from "@/lib/hooks/usePopulationData"
+import { useRegionalData } from "@/lib/hooks/useRegionalData"
 
 type Role = "NGO Admin" | "Field Worker"
 
@@ -21,6 +22,7 @@ export default function CareFlowApp() {
   const [pendingCopilotMessage, setPendingCopilotMessage] = useState<string | undefined>(undefined)
   const [role, setRole] = useState<Role>("NGO Admin")
   const { stats, loading: statsLoading } = usePopulationData()
+  const { data: regionalData, loading: regionalLoading } = useRegionalData()
 
   const handleSelectPatient = useCallback((patient: Patient) => {
     setSelectedPatient(patient)
@@ -217,28 +219,33 @@ export default function CareFlowApp() {
                 <h1 className="text-2xl font-bold text-foreground mb-1">Regional Analysis</h1>
                 <p className="text-muted-foreground">Geographic health data and regional insights</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
-                  <p className="text-sm text-muted-foreground mb-4">Dakar Region</p>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">High-Risk Coverage</p>
-                      <div className="w-full bg-muted rounded-full h-2"><div className="bg-primary h-2 rounded-full w-3/4" /></div>
+              {regionalLoading ? (
+                <p className="text-sm text-muted-foreground">Synchronizing regional data...</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {regionalData?.groups.map((group, idx) => (
+                    <div key={idx} className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
+                      <p className="text-sm text-muted-foreground mb-4 uppercase font-bold tracking-widest">{group.phc}</p>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                           <span className="text-xs text-muted-foreground">Population</span>
+                           <span className="text-xs font-bold">{group.population.toLocaleString()}</span>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-muted-foreground mb-1 uppercase font-bold">Avg Risk Score</p>
+                          <div className="w-full bg-muted rounded-full h-1.5"><div className="bg-primary h-1.5 rounded-full" style={{ width: `${group.avg_risk_score}%` }} /></div>
+                          <p className="text-lg font-bold text-foreground mt-1">{group.avg_risk_score}%</p>
+                        </div>
+                        <div className="grid grid-cols-3 gap-1">
+                           <div className="h-1 bg-risk-critical rounded-full" style={{ opacity: group.risk_distribution.red / 100 }} />
+                           <div className="h-1 bg-risk-warning rounded-full" style={{ opacity: group.risk_distribution.yellow / 100 }} />
+                           <div className="h-1 bg-risk-stable rounded-full" style={{ opacity: group.risk_distribution.green / 100 }} />
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-lg font-bold text-foreground">75% of population</p>
-                  </div>
+                  ))}
                 </div>
-                <div className="bg-card border border-border rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
-                  <p className="text-sm text-muted-foreground mb-4">Health Worker Density</p>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Active Deployment</p>
-                      <div className="w-full bg-muted rounded-full h-2"><div className="bg-risk-stable h-2 rounded-full w-4/5" /></div>
-                    </div>
-                    <p className="text-lg font-bold text-foreground">1 per 2,847 people</p>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           ) : activeView === "settings" ? (
             <div className="animate-fade-in-up space-y-6">
@@ -267,7 +274,7 @@ export default function CareFlowApp() {
             </div>
           ) : (
             <MacroRadar
-              selectedPatientId={selectedPatient?.id ?? null}
+              selectedPatientId={selectedPatient ? (selectedPatient as any).id : null}
               onSelectPatient={handleSelectPatient}
             />
           )}

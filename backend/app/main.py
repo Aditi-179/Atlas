@@ -12,6 +12,8 @@ from app.features.RAG.router import router as rag_router
 from app.features.auth.router import router as auth_router
 from app.features.mobile_api.router import router as mobile_api_router
 from app.features.behavioral_sim.router import router as behavioral_sim_router
+from app.features.digital_twin.router import router as digital_twin_router
+from app.features.health_agent.router import router as health_agent_router
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
@@ -69,6 +71,18 @@ app.include_router(
     behavioral_sim_router,
     prefix=f"{settings.API_V1_STR}/behavioral-sim",
     tags=["Behavioral Simulation"]
+)
+
+app.include_router(
+    digital_twin_router,
+    prefix=f"{settings.API_V1_STR}/digital-twin",
+    tags=["Digital Twin"]
+)
+
+app.include_router(
+    health_agent_router,
+    prefix=f"{settings.API_V1_STR}/health-agent",
+    tags=["Health Agent Voice Assistant"]
 )
 
 @app.get("/health", tags=["System"])
