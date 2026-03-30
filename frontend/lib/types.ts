@@ -148,3 +148,46 @@ export interface PatientProfile {
 export interface MobilePatientData extends PatientProfile {
   // Can expand with assigned_worker specific tracking
 }
+
+// ==========================================
+// POPULATION HEALTH ANALYTICS TYPES
+// ==========================================
+export interface RiskDistribution {
+  red: number;
+  yellow: number;
+  green: number;
+}
+
+export interface InterventionImpact {
+  before_hospitalizations: number;
+  after_hospitalizations: number;
+  reduction_percent: number;
+}
+
+export interface PopulationGroup {
+  phc: string;
+  population: number;
+  avg_risk_score: number;
+  risk_distribution: RiskDistribution;
+  intervention_impact: InterventionImpact;
+}
+
+export interface PopulationAggregateResponse {
+  source: string;
+  groups: PopulationGroup[];
+}
+
+export interface InterventionConfig {
+  home_visit_increase: number;
+  counseling_sessions: number;
+  screening_boost: number;
+}
+
+export interface SimulationRequest {
+  source?: "mongo" | "csv";
+  location_field?: string;
+  phc?: string;
+  csv_path?: string;
+  forecast_months?: number;
+  intervention: InterventionConfig;
+}

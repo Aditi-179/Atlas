@@ -136,11 +136,10 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 {Math.round(riskScore as number)}%
               </h2>
               <div className="mt-2 flex items-center gap-2 flex-wrap">
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  riskTierLabel === "Red" ? "bg-[#fee2e2] text-[#dc2626]" :
-                  riskTierLabel === "Yellow" ? "bg-[#fef3c7] text-[#d97706]" :
-                  "bg-[#d1fae5] text-[#0d9488]"
-                }`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${riskTierLabel === "Red" ? "bg-[#fee2e2] text-[#dc2626]" :
+                    riskTierLabel === "Yellow" ? "bg-[#fef3c7] text-[#d97706]" :
+                      "bg-[#d1fae5] text-[#0d9488]"
+                  }`}>
                   {riskTierLabel} Risk
                 </span>
                 {riskResult && (
@@ -158,8 +157,8 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
             <h3 className="font-semibold mb-3">Top Risk Drivers (AI Explanation)</h3>
             <div className="space-y-2">
               {riskResult.top_contributors.map((c, i) => {
-                const impact = typeof c === "object" && "impact" in c ? (c as { feature: string; impact: number }).impact : 0
-                const feat = typeof c === "object" && "feature" in c ? (c as { feature: string; impact: number }).feature : String(c)
+                const impact = typeof c === "object" && "impact" in c ? (c as unknown as { feature: string; impact: number }).impact : 0
+                const feat = typeof c === "object" && "feature" in c ? (c as unknown as { feature: string; impact: number }).feature : String(c)
                 const pct = Math.min(Math.abs(impact * 100), 100)
                 return (
                   <div key={i} className="flex items-center gap-3">
