@@ -40,23 +40,27 @@
                 <p class="text-slate-400 text-sm font-medium tracking-wide">Predictive Stratification & Intelligent
                     Decision Support</p>
             </div>
-            <div class="glass border border-slate-700 px-6 py-3 rounded-2xl flex items-center gap-6">
-                <div>
-                    <div class="text-[10px] text-slate-500 uppercase font-bold">System Status</div>
-                    <div class="text-emerald-400 font-mono text-sm flex items-center"><span
-                            class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span> Unified Engine Live
+            <div class="flex items-center gap-4">
+                <a href="dashboard.html"
+                    class="bg-slate-800 border border-slate-700 px-6 py-3 rounded-2xl text-xs font-bold hover:bg-slate-700 transition uppercase flex items-center gap-2">
+                    <span>NGO Analytics Dashboard</span> 📊
+                </a>
+                <div class="glass border border-slate-700 px-6 py-3 rounded-2xl flex items-center gap-6">
+                    <div>
+                        <div class="text-[10px] text-slate-500 uppercase font-bold">Engine Status</div>
+                        <div class="text-emerald-400 font-mono text-sm flex items-center"><span
+                                class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span> Live</div>
                     </div>
-                </div>
-                <div class="h-8 w-[1px] bg-slate-700"></div>
-                <div>
-                    <div class="text-[10px] text-slate-500 uppercase font-bold">NCD Records</div>
-                    <div id="recordCount" class="text-slate-100 font-mono text-sm">-- Total</div>
+                    <div class="h-8 w-[1px] bg-slate-700"></div>
+                    <div>
+                        <div class="text-[10px] text-slate-500 uppercase font-bold">Total Screened</div>
+                        <div id="recordCount" class="text-slate-100 font-mono text-sm">--</div>
+                    </div>
                 </div>
             </div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
             <!-- 1. CLINICAL INPUT FORM -->
             <div class="lg:col-span-4 space-y-6">
                 <div class="bg-slate-800 p-8 rounded-3xl shadow-2xl border border-slate-700 relative overflow-hidden">
@@ -74,12 +78,12 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div><label class="text-[11px] uppercase font-bold text-slate-500 mb-1.5 block">Actual
                                     Age</label>
-                                <input type="number" id="RawAge" value="50" placeholder="Years"
-                                    class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                                <input type="number" id="RawAge" value="50"
+                                    class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white outline-none">
                             </div>
                             <div><label class="text-[11px] uppercase font-bold text-slate-500 mb-1.5 block">Sex</label>
                                 <select id="Sex"
-                                    class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                                    class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white outline-none">
                                     <option value="1">Male</option>
                                     <option value="0">Female</option>
                                 </select>
@@ -91,8 +95,8 @@
                                 <input type="number" id="BMI" value="28.5" step="0.1"
                                     class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white outline-none">
                             </div>
-                            <div><label class="text-[11px] uppercase font-bold text-slate-500 mb-1.5 block">Annual
-                                    Income ($)</label>
+                            <div><label class="text-[11px] uppercase font-bold text-slate-500 mb-1.5 block">Income
+                                    ($)</label>
                                 <input type="number" id="RawIncome" value="45000"
                                     class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white outline-none">
                             </div>
@@ -103,32 +107,26 @@
                                 <label
                                     class="text-[10px] uppercase font-bold text-slate-600 mb-2 block">Clinical</label>
                                 <div class="flex items-center justify-between mb-2 text-xs"><span>High BP</span><input
-                                        type="checkbox" id="HighBP" checked class="w-4 h-4 rounded accent-blue-500">
-                                </div>
+                                        type="checkbox" id="HighBP" checked class="w-4 h-4 accent-blue-500"></div>
                                 <div class="flex items-center justify-between text-xs"><span>High Chol</span><input
-                                        type="checkbox" id="HighChol" checked class="w-4 h-4 rounded accent-blue-500">
-                                </div>
+                                        type="checkbox" id="HighChol" checked class="w-4 h-4 accent-blue-500"></div>
                             </div>
                             <div class="bg-slate-900/30 p-3 rounded-2xl border border-slate-700/50">
                                 <label
                                     class="text-[10px] uppercase font-bold text-slate-600 mb-2 block">Behavioral</label>
                                 <div class="flex items-center justify-between mb-2 text-xs"><span>Smoker</span><input
-                                        type="checkbox" id="Smoker" checked class="w-4 h-4 rounded accent-blue-500">
-                                </div>
+                                        type="checkbox" id="Smoker" checked class="w-4 h-4 accent-blue-500"></div>
                                 <div class="flex items-center justify-between text-xs"><span>Veggies</span><input
-                                        type="checkbox" id="Veggies" checked class="w-4 h-4 rounded accent-blue-500">
-                                </div>
+                                        type="checkbox" id="Veggies" checked class="w-4 h-4 accent-blue-500"></div>
                             </div>
                         </div>
 
-                        <input type="hidden" id="Education" value="4">
-                        <input type="hidden" id="Fruits" value="1">
-                        <input type="hidden" id="PhysActivity" value="1">
-                        <input type="hidden" id="HvyAlcoholConsump" value="0">
-                        <input type="hidden" id="DiffWalk" value="0">
+                        <input type="hidden" id="Education" value="4"><input type="hidden" id="Fruits" value="1"><input
+                            type="hidden" id="PhysActivity" value="1"><input type="hidden" id="HvyAlcoholConsump"
+                            value="0"><input type="hidden" id="DiffWalk" value="0">
 
                         <button type="button" onclick="runPipeline()" id="runBtn"
-                            class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-900/20 transition-all active:scale-95 flex justify-center items-center gap-3">
+                            class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl transition-all active:scale-95 flex justify-center items-center gap-3">
                             <span id="btnText">EXECUTE AI PIPELINE</span>
                             <div id="loader" class="hidden animate-spin rounded-full h-5 w-5 border-b-2 border-white">
                             </div>
@@ -137,11 +135,11 @@
                 </div>
             </div>
 
-            <!-- 2. DIAGNOSTIC OUTPUTS (Right) -->
+            <!-- 2. DIAGNOSTIC OUTPUTS -->
             <div class="lg:col-span-8 space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div
-                        class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-xl relative overflow-hidden group">
+                        class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-xl relative overflow-hidden">
                         <div id="tierColorBar"
                             class="absolute left-0 top-0 bottom-0 w-2 bg-slate-700 transition-colors duration-500">
                         </div>
@@ -151,14 +149,13 @@
                             <div>
                                 <div id="riskScore" class="text-7xl font-black leading-none text-slate-200">--%</div>
                                 <div id="riskTier"
-                                    class="mt-4 px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-slate-900 text-slate-400 inline-block border border-slate-700">
+                                    class="mt-4 px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-slate-900 text-slate-400 border border-slate-700 inline-block">
                                     Waiting...</div>
                             </div>
                             <div class="text-right">
                                 <div id="modelName" class="text-[10px] font-mono text-slate-500 mb-1 uppercase">No Model
-                                    Active</div>
-                                <div id="accuracyTag" class="text-[11px] font-bold text-blue-500/60">Ready for data
                                 </div>
+                                <div id="accuracyTag" class="text-[11px] font-bold text-blue-500/60">Ready</div>
                             </div>
                         </div>
                     </div>
@@ -167,8 +164,7 @@
                         <h3 class="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-6">Predictive Drivers
                             (XAI)</h3>
                         <div id="shapContainer" class="space-y-4">
-                            <p class="text-xs text-slate-500 italic">Predictive factors will appear here after analysis.
-                            </p>
+                            <p class="text-xs text-slate-500 italic">Data drivers will appear here.</p>
                         </div>
                     </div>
                 </div>
@@ -176,11 +172,9 @@
                 <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-xl">
                     <div class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
                         <h3 class="text-xs font-bold text-purple-400 uppercase tracking-widest">Decision Support (IDSS)
-                        </h3>
-                        <span id="ps8-status"
-                            class="text-[10px] bg-slate-900 px-3 py-1 rounded-full text-slate-500 font-bold">READY</span>
+                        </h3><span id="ps8-status"
+                            class="text-[10px] bg-slate-900 px-3 py-1 rounded-full text-slate-500 font-bold uppercase">Ready</span>
                     </div>
-
                     <div id="protocolContent" class="opacity-30 transition-opacity duration-500">
                         <p id="llmSummary"
                             class="text-xl font-medium text-slate-100 mb-8 border-l-4 border-indigo-500 pl-6 leading-relaxed">
@@ -193,134 +187,67 @@
     </div>
 
     <script>
-        // MAPPING: Convert Raw Years/USD to BRFSS Code Scales (1-13 and 1-8)
-        function mapAge(years) {
-            if (years < 18) return 1;
-            if (years >= 80) return 13;
-            // BRFSS Age buckets are mostly 5-year intervals starting at 18
-            return Math.min(13, Math.floor((years - 18) / 5) + 1);
-        }
+        function mapAge(years) { if (years < 18) return 1; if (years >= 80) return 13; return Math.min(13, Math.floor((years - 18) / 5) + 1); }
+        function mapIncome(usd) { if (usd < 10000) return 1; if (usd < 15000) return 2; if (usd < 20000) return 3; if (usd < 25000) return 4; if (usd < 35000) return 5; if (usd < 50000) return 6; if (usd < 75000) return 7; return 8; }
 
-        function mapIncome(usd) {
-            if (usd < 10000) return 1;
-            if (usd < 15000) return 2;
-            if (usd < 20000) return 3;
-            if (usd < 25000) return 4;
-            if (usd < 35000) return 5;
-            if (usd < 50000) return 6;
-            if (usd < 75000) return 7;
-            return 8;
+        async function updateHeaderCount() {
+            try {
+                const res = await fetch('/api/v1/population-health/stats');
+                const data = await res.json();
+                document.getElementById('recordCount').innerText = data.total_screened;
+            } catch (err) { }
         }
 
         async function runPipeline() {
             const btn = document.getElementById('runBtn');
             const loader = document.getElementById('loader');
             const btnText = document.getElementById('btnText');
-
-            btn.disabled = true;
-            btnText.innerText = "PROCESSING";
-            loader.classList.remove('hidden');
+            btn.disabled = true; btnText.innerText = "PROCESSING"; loader.classList.remove('hidden');
 
             const rawAge = parseInt(document.getElementById('RawAge').value);
             const rawIncome = parseInt(document.getElementById('RawIncome').value);
 
-            // Payload for PS7 (ML Model needs the Code Scales)
             const patientData = {
-                Age: mapAge(rawAge),
-                Income: mapIncome(rawIncome),
-                Sex: parseInt(document.getElementById('Sex').value),
-                BMI: parseFloat(document.getElementById('BMI').value),
-                HighBP: document.getElementById('HighBP').checked ? 1 : 0,
-                HighChol: document.getElementById('HighChol').checked ? 1 : 0,
-                Smoker: document.getElementById('Smoker').checked ? 1 : 0,
-                Veggies: document.getElementById('Veggies').checked ? 1 : 0,
-                PhysActivity: parseInt(document.getElementById('PhysActivity').value),
-                Fruits: parseInt(document.getElementById('Fruits').value),
-                HvyAlcoholConsump: parseInt(document.getElementById('HvyAlcoholConsump').value),
-                DiffWalk: parseInt(document.getElementById('DiffWalk').value),
-                Education: parseInt(document.getElementById('Education').value)
+                Age: mapAge(rawAge), Income: mapIncome(rawIncome), Sex: parseInt(document.getElementById('Sex').value), BMI: parseFloat(document.getElementById('BMI').value),
+                HighBP: document.getElementById('HighBP').checked ? 1 : 0, HighChol: document.getElementById('HighChol').checked ? 1 : 0, Smoker: document.getElementById('Smoker').checked ? 1 : 0,
+                Veggies: document.getElementById('Veggies').checked ? 1 : 0, PhysActivity: 1, Fruits: 1, HvyAlcoholConsump: 0, DiffWalk: 0, Education: 4
             };
 
             try {
-                // 1. RISK PREDICTION
-                const predRes = await fetch('/api/v1/risk-engine/predict', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(patientData)
-                });
+                const predRes = await fetch('/api/v1/risk-engine/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(patientData) });
                 const risk = await predRes.json();
 
                 document.getElementById('riskScore').innerText = risk.risk_score + "%";
-                document.getElementById('riskTier').innerText = risk.risk_tier + " Risk Tier";
+                document.getElementById('riskTier').innerText = risk.risk_tier + " Risk";
                 document.getElementById('modelName').innerText = risk.model_used;
                 document.getElementById('accuracyTag').innerText = (risk.accuracy_at_training * 100).toFixed(1) + "% Reliable";
 
                 const bar = document.getElementById('tierColorBar');
-                if (risk.risk_tier === 'Red') bar.className = "absolute left-0 top-0 bottom-0 w-2 bg-red-500";
-                else if (risk.risk_tier === 'Yellow') bar.className = "absolute left-0 top-0 bottom-0 w-2 bg-yellow-500";
-                else bar.className = "absolute left-0 top-0 bottom-0 w-2 bg-emerald-500";
+                bar.className = `absolute left-0 top-0 bottom-0 w-2 ${risk.risk_tier === 'Red' ? 'bg-red-500' : (risk.risk_tier === 'Yellow' ? 'bg-yellow-500' : 'bg-emerald-500')}`;
 
-                const shapCont = document.getElementById('shapContainer');
-                shapCont.innerHTML = "";
+                const shapCont = document.getElementById('shapContainer'); shapCont.innerHTML = "";
+                const maxImpact = Math.max(...risk.top_contributors.map(i => Math.abs(i.impact)));
                 risk.top_contributors.forEach(item => {
                     const color = item.impact > 0 ? 'bg-red-500' : 'bg-emerald-500';
-                    shapCont.innerHTML += `
-                        <div class="text-[10px]">
-                            <div class="flex justify-between mb-1 uppercase font-black tracking-tight"><span>${item.feature}</span><span>${item.impact > 0 ? '+' : ''}${item.impact.toFixed(2)}</span></div>
-                            <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-700">
-                                <div class="shap-bar h-full ${color}" style="width: ${Math.min(Math.abs(item.impact) * 100, 100)}%"></div>
-                            </div>
-                        </div>`;
+                    shapCont.innerHTML += `<div class="text-[10px] mb-3"><div class="flex justify-between mb-1 uppercase font-black"><span>${item.feature}</span><span>${item.impact > 0 ? '↑' : '↓'} ${Math.abs(item.impact).toFixed(3)}</span></div><div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-700"><div class="shap-bar h-full ${color}" style="width: ${(Math.abs(item.impact) / maxImpact) * 100}%"></div></div></div>`;
                 });
 
-                // 2. PROTOCOL GENERATION (Groq receives Actual Age for better context)
-                document.getElementById('ps8-status').innerText = "QUERYING GROQ...";
-                const protocolRes = await fetch('/api/v1/decision-support/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        age: rawAge,
-                        gender: document.getElementById('Sex').value == 1 ? "Male" : "Female",
-                        vitals: { "bmi": patientData.BMI, "high_bp": patientData.HighBP ? "High" : "Normal", "high_chol": patientData.HighChol ? "High" : "Normal" },
-                        habits: { "smoking": patientData.Smoker ? "Yes" : "No", "veggies": patientData.Veggies ? "High Intake" : "Low Intake" },
-                        risk_tier: risk.risk_tier
-                    })
-                });
+                const protocolRes = await fetch('/api/v1/decision-support/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ age: rawAge, gender: document.getElementById('Sex').value == 1 ? "Male" : "Female", vitals: { "bmi": patientData.BMI, "high_bp": patientData.HighBP ? "High" : "Normal" }, habits: { "smoking": patientData.Smoker ? "Yes" : "No" }, risk_tier: risk.risk_tier }) });
                 const protocol = await protocolRes.json();
 
                 document.getElementById('protocolContent').classList.remove('opacity-30');
                 document.getElementById('llmSummary').innerText = protocol.summary;
-                document.getElementById('ps8-status').innerText = "PROTOCOL ACTIVE";
+                document.getElementById('ps8-status').innerText = "Active";
 
-                const stepsCont = document.getElementById('llmSteps');
-                stepsCont.innerHTML = "";
+                const stepsCont = document.getElementById('llmSteps'); stepsCont.innerHTML = "";
                 protocol.protocol_steps.forEach(step => {
-                    stepsCont.innerHTML += `
-                        <div class="bg-slate-900/50 p-5 rounded-2xl border border-slate-700 shadow-inner group hover:border-indigo-500/50 transition-colors">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">${step.category}</span>
-                                <span class="text-[9px] bg-slate-800 px-2.5 py-1 rounded-lg text-slate-400 border border-slate-700 uppercase">${step.urgency}</span>
-                            </div>
-                            <p class="text-[13px] text-slate-300 leading-relaxed mb-4">${step.action}</p>
-                            <p class="text-[9px] text-slate-600 font-mono italic tracking-tight">Source: ${step.evidence_citation}</p>
-                        </div>`;
+                    stepsCont.innerHTML += `<div class="bg-slate-900/50 p-5 rounded-2xl border border-slate-700"> <div class="flex justify-between items-center mb-3"><span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">${step.category}</span><span class="text-[9px] bg-slate-800 px-2.5 py-1 rounded-lg text-slate-400 border border-slate-700 uppercase">${step.urgency}</span></div><p class="text-[13px] text-slate-300 leading-relaxed mb-4">${step.action}</p><p class="text-[9px] text-slate-600 italic">Source: ${step.evidence_citation}</p></div>`;
                 });
 
-            } catch (err) {
-                console.error(err);
-                alert("Check Backend Connection.");
-            } finally {
-                btn.disabled = false;
-                btnText.innerText = "EXECUTE AI PIPELINE";
-                loader.classList.add('hidden');
-            }
+                updateHeaderCount();
+            } catch (err) { console.error(err); } finally { btn.disabled = false; btnText.innerText = "EXECUTE AI PIPELINE"; loader.classList.add('hidden'); }
         }
-
-        // Initial Fetch for Stats
-        fetch('/api/v1/population-health/stats')
-            .then(r => r.json())
-            .then(data => document.getElementById('recordCount').innerText = data.total + " Total Screened");
-
+        window.onload = updateHeaderCount;
     </script>
 </body>
 

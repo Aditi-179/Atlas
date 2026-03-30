@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aegis Health OS 🛡️ - NGO Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 p-8 font-sans">
+    <div class="max-w-6xl mx-auto">
+        <header class="flex justify-between items-center mb-12 border-b border-slate-800 pb-6">
+            <div>
+                <h1 class="text-4xl font-black text-blue-500 uppercase tracking-tighter">Community Dashboard 📊</h1>
+                <p class="text-slate-400 text-sm">Aggregated Population Risk Distribution</p>
+            </div>
+            <a href="index.html"
+                class="bg-slate-800 border border-slate-700 px-6 py-3 rounded-2xl text-xs font-bold hover:bg-slate-700 transition uppercase">Back
+                to Clinical Input</a>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 text-center">
+                <div id="total" class="text-6xl font-black mb-2">0</div>
+                <div class="text-xs text-slate-500 uppercase font-bold">Total Screened</div>
+            </div>
+            <div class="bg-red-500/10 p-8 rounded-3xl border border-red-500/20 text-center text-red-500">
+                <div id="red" class="text-6xl font-black mb-2">0</div>
+                <div class="text-xs uppercase font-bold">High Risk (Red)</div>
+            </div>
+            <div class="bg-yellow-500/10 p-8 rounded-3xl border border-yellow-500/20 text-center text-yellow-500">
+                <div id="yellow" class="text-6xl font-black mb-2">0</div>
+                <div class="text-xs uppercase font-bold">Moderate (Yellow)</div>
+            </div>
+            <div class="bg-emerald-500/10 p-8 rounded-3xl border border-emerald-500/20 text-center text-emerald-400">
+                <div id="green" class="text-6xl font-black mb-2">0</div>
+                <div class="text-xs uppercase font-bold">Low Risk (Green)</div>
+            </div>
+        </div>
+
+        <div class="bg-slate-800 rounded-3xl border border-slate-700 overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-slate-700 bg-slate-800/50 flex justify-between items-center">
+                <h3 class="font-bold text-slate-300">Detailed Community Logs</h3><button onclick="fetchData()"
+                    class="text-xs text-blue-500 font-bold hover:underline uppercase">Refresh Data</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-900/50 text-[10px] text-slate-500 uppercase font-black">
+                        <tr>
+                            <th class="p-5">Screening Timestamp</th>
+                            <th class="p-5">Risk Probability</th>
+                            <th class="p-5">Assigned Tier</th>
+                            <th class="p-5">Patient Age Code</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs" class="text-sm divide-y divide-slate-700/50"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const statsRes = await fetch('/api/v1/population-health/stats');
+                const stats = await statsRes.json();
+                document.getElementById('total').innerText = stats.total_screened;
+                document.getElementById('red').innerText = stats.risk_distribution.Red || 0;
+                document.getElementById('yellow').innerText = stats.risk_distribution.Yellow || 0;
+                document.getElementById('green').innerText = stats.risk_distribution.Green || 0;
+
+                // Assuming backend/app/data/population_records.json is being read here
+                const logRes = await fetch('/api/v1/population-health/stats');
+                // In a production environment, you'd have a separate /logs endpoint.
+                // For now, we'll assume the /stats provides enough data or the service reads the JSON directly.
+            } catch (err) { console.error(err); }
+        }
+        window.onload = fetchData;
+    </script>
+</body>
+
+</html>
