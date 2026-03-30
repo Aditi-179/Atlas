@@ -1,15 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { use, useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import { AppShell } from "@/components/app-shell"
 import { getPatientById } from "@/lib/patients"
 
 const SPRING = { type: "spring" as const, stiffness: 300, damping: 30 }
 
-export default function PatientDetailPage({ params }: { params: { id: string } }) {
-  const patient = useMemo(() => getPatientById(params.id), [params.id])
+export default function PatientDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
+  const patient = useMemo(() => getPatientById(id), [id])
   const [generated, setGenerated] = useState(false)
   const [completed, setCompleted] = useState<Record<number, boolean>>({})
   const [notes, setNotes] = useState("")

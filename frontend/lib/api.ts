@@ -11,7 +11,9 @@ import {
   Token,
   MobilePatientData,
   MobileRecordUpdate,
-  PatientProfile
+  PatientProfile,
+  PopulationAggregateResponse,
+  SimulationRequest,
 } from './types';
 
 // Assuming the FastAPI backend runs on localhost:8000
@@ -67,4 +69,35 @@ export const api = {
     });
     if (!res.ok) throw new Error("Failed to fetch population stats");
     return res.json();
-  }
+  },
+
+  async getResourceAllocation(
+    source: string = "mongo",
+    location_field: string = "phc",
+    phc?: string
+  ): Promise<PopulationAggregateResponse> {
+    const params = new URLSearchParams({
+      source,
+      location_field,
+      ...(phc && { phc }),
+    });
+    const res = await fetch(`${API_BASE_URL}/population-health/resource-allocation?${params}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (!res.ok) throw new Error("Failed to fetch resource allocation");
+    return res.json();
+  },
+
+  async simulateIntervention(
+    request: SimulationRequest
+  ): Promise<PopulationAggregateResponse> {
+    const res = await fetch(`${API_BASE_URL}/population-health/resource-allocation/simulate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(request),
+    });
+    if (!res.ok) throw new Error("Failed to simulate intervention");
+    return res.json();
+  },
+}

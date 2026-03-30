@@ -102,6 +102,38 @@ export default function DashboardPage() {
           ))}
         </div>
       </section>
+
+      <section className="mt-6">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="font-heading text-2xl">Population Health Analytics</h3>
+          <p className="text-sm text-foreground/60">District-level resource allocation & forecasting</p>
+        </div>
+        <motion.article
+          whileHover={{ y: -4, boxShadow: "0 14px 28px rgba(15,23,42,0.08)" }}
+          transition={SPRING}
+          className="rounded-2xl bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 px-6 py-6"
+        >
+          <div className="flex items-start justify-between">
+            <div className="max-w-2xl">
+              <h4 className="font-semibold text-lg">Resource Allocation & Intervention Planning</h4>
+              <p className="text-foreground/70 mt-2">
+                Aggregate population-level risk data across villages and PHCs. Simulate intervention strategies and forecast hospitalization reductions over 6 months.
+              </p>
+              <div className="flex gap-2 mt-4 text-sm">
+                <span className="inline-block px-3 py-1 rounded-full bg-primary/15 text-primary font-medium">📊 Real-time aggregation</span>
+                <span className="inline-block px-3 py-1 rounded-full bg-primary/15 text-primary font-medium">🎯 What-if simulator</span>
+                <span className="inline-block px-3 py-1 rounded-full bg-primary/15 text-primary font-medium">📈 AI insights</span>
+              </div>
+            </div>
+            <Link 
+              href="/dashboard/population-health" 
+              className="rounded-full bg-primary px-6 py-2 text-sm text-primary-foreground font-semibold hover:bg-primary/90 transition flex-shrink-0"
+            >
+              Open Analytics →
+            </Link>
+          </div>
+        </motion.article>
+      </section>
     </AppShell>
   )
 }
