@@ -1,47 +1,38 @@
-import json
-import os
 from datetime import datetime
 from .schemas import PopulationStats
+from app.core.database import predictions_collection
 
 class PopulationHealthService:
-    def __init__(self):
-        self.base_dir = os.path.dirname(os.path.abspath(__file__))
-        # Store records in app/data/records.json
-        self.db_path = os.path.abspath(os.path.join(self.base_dir, "../../data/records.json"))
-        
-        # Ensure the data directory exists
-        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
-        if not os.path.exists(self.db_path):
-            with open(self.db_path, 'w') as f:
-                json.dump([], f)
-
     def save_patient_result(self, risk_data: dict):
-        """Saves a new screening result to our local JSON store"""
+        """Saves a new screening result to MongoDB Atlas."""
         try:
-            with open(self.db_path, 'r') as f:
-                records = json.load(f)
-            
-            # Add metadata
             record = {
                 "timestamp": datetime.now().isoformat(),
                 "risk_score": risk_data['risk_score'],
                 "risk_tier": risk_data['risk_tier'],
-                "age": risk_data.get('Age', 0)
+                "age": risk_data.get('Age', 0),
+                "model_used": risk_data.get('model_used'),
+                "accuracy": risk_data.get('accuracy'),
+                "top_contributors": risk_data.get('top_contributors', [])
             }
-            
-            records.append(record)
-            
-            with open(self.db_path, 'w') as f:
-                json.dump(records, f)
+
+            predictions_collection.insert_one(record)
             return True
         except Exception as e:
             print(f"Failed to save record: {e}")
             return False
 
     def get_stats(self) -> PopulationStats:
-        """Aggregates all saved records for the NGO dashboard"""
-        with open(self.db_path, 'r') as f:
-            records = json.load(f)
+        """Aggregates all saved records from MongoDB for the NGO dashboard."""
+        records = list(
+            predictions_collection.find(
+                {
+                    "risk_tier": {"$in": ["Red", "Yellow", "Green"]},
+                    "risk_score": {"$type": "number"}
+                },
+                {"_id": 0, "risk_tier": 1, "risk_score": 1}
+            )
+        )
 
         if not records:
             return PopulationStats(total_screened=0, risk_distribution={}, average_risk_score=0, high_risk_priority_count=0)
@@ -50,14 +41,17 @@ class PopulationHealthService:
         total_score = 0
         
         for r in records:
-            tier = r['risk_tier']
+            tier = r.get('risk_tier')
+            score = r.get('risk_score')
+            if tier not in dist or not isinstance(score, (int, float)):
+                continue
             dist[tier] = dist.get(tier, 0) + 1
-            total_score += r['risk_score']
+            total_score += score
 
         return PopulationStats(
-            total_screened=len(records),
+            total_screened=sum(dist.values()),
             risk_distribution=dist,
-            average_risk_score=round(total_score / len(records), 2),
+            average_risk_score=round(total_score / max(1, sum(dist.values())), 2),
             high_risk_priority_count=dist.get("Red", 0)
         )
 

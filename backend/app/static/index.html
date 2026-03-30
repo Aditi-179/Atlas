@@ -226,11 +226,16 @@
                 bar.className = `absolute left-0 top-0 bottom-0 w-2 ${risk.risk_tier === 'Red' ? 'bg-red-500' : (risk.risk_tier === 'Yellow' ? 'bg-yellow-500' : 'bg-emerald-500')}`;
 
                 const shapCont = document.getElementById('shapContainer'); shapCont.innerHTML = "";
-                const maxImpact = Math.max(...risk.top_contributors.map(i => Math.abs(i.impact)));
-                risk.top_contributors.forEach(item => {
-                    const color = item.impact > 0 ? 'bg-red-500' : 'bg-emerald-500';
-                    shapCont.innerHTML += `<div class="text-[10px] mb-3"><div class="flex justify-between mb-1 uppercase font-black"><span>${item.feature}</span><span>${item.impact > 0 ? '↑' : '↓'} ${Math.abs(item.impact).toFixed(3)}</span></div><div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-700"><div class="shap-bar h-full ${color}" style="width: ${(Math.abs(item.impact) / maxImpact) * 100}%"></div></div></div>`;
-                });
+                const contributors = Array.isArray(risk.top_contributors) ? risk.top_contributors : [];
+                if (contributors.length === 0) {
+                    shapCont.innerHTML = '<p class="text-xs text-slate-500 italic">XAI drivers are currently unavailable for this prediction.</p>';
+                } else {
+                    const maxImpact = Math.max(...contributors.map(i => Math.abs(i.impact))) || 1;
+                    contributors.forEach(item => {
+                        const color = item.impact > 0 ? 'bg-red-500' : 'bg-emerald-500';
+                        shapCont.innerHTML += `<div class="text-[10px] mb-3"><div class="flex justify-between mb-1 uppercase font-black"><span>${item.feature}</span><span>${item.impact > 0 ? '↑' : '↓'} ${Math.abs(item.impact).toFixed(3)}</span></div><div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-700"><div class="shap-bar h-full ${color}" style="width: ${(Math.abs(item.impact) / maxImpact) * 100}%"></div></div></div>`;
+                    });
+                }
 
                 const protocolRes = await fetch('/api/v1/decision-support/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ age: rawAge, gender: document.getElementById('Sex').value == 1 ? "Male" : "Female", vitals: { "bmi": patientData.BMI, "high_bp": patientData.HighBP ? "High" : "Normal" }, habits: { "smoking": patientData.Smoker ? "Yes" : "No" }, risk_tier: risk.risk_tier }) });
                 const protocol = await protocolRes.json();
