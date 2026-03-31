@@ -204,11 +204,7 @@ Atlas/
 │       │   ├── population_health/   # CSV population data API
 │       │   ├── auth/                # JWT authentication
 │       │   ├── mobile_api/          # Health worker & patient endpoints
-│       │   ├── adherence_monitor/   # (In development)
-│       │   ├── behavioral_sim/      # (In development)
-│       │   ├── bias_auditor/        # (In development)
-│       │   ├── digital_twin/        # (In development)
-│       │   └── health_agent/        # (In development)
+│       │  
 │       ├── models/
 │       │   ├── artifacts/           # Trained model files (.joblib, .pkl)
 │       │   ├── RadomForest/         # RF training scripts
