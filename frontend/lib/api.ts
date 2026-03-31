@@ -13,7 +13,12 @@ import {
   MobileRecordUpdate,
   PatientProfile,
   PopulationAggregateResponse,
+  PopulationSimulationRequest,
   SimulationRequest,
+  SimulationResponse,
+  DigitalTwinResponse,
+  VoiceInput,
+  HealthAgentResponse,
 } from './types';
 
 // Assuming the FastAPI backend runs on localhost:8000
@@ -90,7 +95,7 @@ export const api = {
   },
 
   async simulateIntervention(
-    request: SimulationRequest
+    request: PopulationSimulationRequest
   ): Promise<PopulationAggregateResponse> {
     const res = await fetch(`${API_BASE_URL}/population-health/resource-allocation/simulate`, {
       method: "POST",
@@ -98,6 +103,72 @@ export const api = {
       body: JSON.stringify(request),
     });
     if (!res.ok) throw new Error("Failed to simulate intervention");
+    return res.json();
+  },
+
+  // ------------------------------------------
+  // AUTHENTICATION
+  // ------------------------------------------
+  async register(data: UserRegister): Promise<Token> {
+    const res = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to register");
+    return res.json();
+  },
+
+  async login(data: UserLogin): Promise<Token> {
+    const params = new URLSearchParams();
+    params.append("username", data.username);
+    params.append("password", data.password);
+
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params,
+    });
+    if (!res.ok) throw new Error("Invalid credentials");
+    return res.json();
+  },
+
+  // ------------------------------------------
+  // BEHAVIORAL SIMULATION
+  // ------------------------------------------
+  async runBehavioralSim(data: SimulationRequest): Promise<SimulationResponse> {
+    const res = await fetch(`${API_BASE_URL}/behavioral_sim/run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to run behavioral simulation");
+    return res.json();
+  },
+
+  // ------------------------------------------
+  // DIGITAL TWIN
+  // ------------------------------------------
+  async projectDigitalTwin(data: RiskPredictionInput): Promise<DigitalTwinResponse> {
+    const res = await fetch(`${API_BASE_URL}/digital-twin/project`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to project digital twin");
+    return res.json();
+  },
+
+  // ------------------------------------------
+  // HEALTH AGENT (VOICE)
+  // ------------------------------------------
+  async processVoice(data: VoiceInput): Promise<HealthAgentResponse> {
+    const res = await fetch(`${API_BASE_URL}/health-agent/process-voice`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Health Agent failed to process voice");
     return res.json();
   },
 }

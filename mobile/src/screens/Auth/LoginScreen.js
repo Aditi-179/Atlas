@@ -32,7 +32,7 @@ const LoginScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.inner}>
-                    <Text style={styles.brandTitle}>🛡️ Aegis Health OS</Text>
+                    <Text style={styles.brandTitle}>🛡️ CareFlow AI</Text>
                     <Text style={styles.subtitle}>Sign in to your account</Text>
 
                     <GlassCard>

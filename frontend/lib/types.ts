@@ -16,8 +16,9 @@ export interface RiskPredictionInput {
   Education: number;
 }
 
-export interface TopContributor {
-  [featureName: string]: number;
+export interface RiskContributor {
+  feature: string;
+  impact: number;
 }
 
 export interface RiskPredictionOutput {
@@ -25,7 +26,7 @@ export interface RiskPredictionOutput {
   risk_tier: string;
   model_used: string;
   accuracy_at_training: number;
-  top_contributors: TopContributor[];
+  top_contributors: RiskContributor[];
 }
 
 // ==========================================
@@ -149,6 +150,45 @@ export interface MobilePatientData extends PatientProfile {
   // Can expand with assigned_worker specific tracking
 }
 
+export interface SimulationRequest {
+  current_state: RiskPredictionInput;
+  modified_habits: Record<string, number>;
+}
+
+export interface SimulationResponse {
+  current_risk: number;
+  simulated_risk: number;
+  risk_reduction: number;
+  impact_message: string;
+}
+
+// ==========================================
+// DIGITAL TWIN TYPES
+// ==========================================
+export interface TwinProjection {
+  month: number;
+  risk_score: number;
+  clinical_state: Record<string, number>;
+}
+
+export interface DigitalTwinResponse {
+  baseline_trajectory: TwinProjection[];
+  optimized_trajectory: TwinProjection[];
+  clinical_narrative: string;
+}
+
+// ==========================================
+// HEALTH AGENT TYPES
+// ==========================================
+export interface VoiceInput {
+  transcript: string;
+}
+
+export interface HealthAgentResponse {
+  structured_data: RiskPredictionInput;
+  spoken_response: string;
+}
+
 // ==========================================
 // POPULATION HEALTH ANALYTICS TYPES
 // ==========================================
@@ -183,7 +223,7 @@ export interface InterventionConfig {
   screening_boost: number;
 }
 
-export interface SimulationRequest {
+export interface PopulationSimulationRequest {
   source?: "mongo" | "csv";
   location_field?: string;
   phc?: string;

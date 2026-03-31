@@ -120,6 +120,24 @@ async def update_patient_record(patient_id: str, record_data: dict, worker: dict
 # 👤 Patient Endpoints
 # -----------------
 
+@router.get("/patient/history")
+async def get_my_history(patient: dict = Depends(get_current_patient)):
+    """Patient gets all their past records to power the Timeline."""
+    if db is None: raise HTTPException(status_code=500, detail="DB Error")
+
+    patient_id = str(patient["_id"])
+    cursor = db["patient_records"].find({"user_id": patient_id}, sort=[("created_at", -1)])
+    records = await cursor.to_list(length=50)
+
+    for r in records:
+        r["id"] = str(r["_id"])
+        del r["_id"]
+        # Convert datetime to ISO string for JSON serialisation
+        if "created_at" in r and hasattr(r["created_at"], "isoformat"):
+            r["created_at"] = r["created_at"].isoformat()
+
+    return records
+
 @router.get("/patient/me")
 async def get_my_record(patient: dict = Depends(get_current_patient)):
     """Patient gets their own profile and latest risk data."""

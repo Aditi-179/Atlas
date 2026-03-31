@@ -4,6 +4,9 @@ import { cn } from "@/lib/utils"
 import { type Patient, type RiskLevel } from "@/lib/mock-data"
 import { ShapChart } from "./shap-chart"
 import { VitalsGrid } from "./vitals-grid"
+import { DigitalTwinView } from "./digital-twin-view"
+import { BehavioralSimView } from "./behavioral-sim-view"
+import { ProtocolView } from "./protocol-view"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar, AlertTriangle, CheckCircle, Clock, Send } from "lucide-react"
@@ -130,6 +133,23 @@ export function PatientDeepDive({ patient, onBack, onAskCopilot }: PatientDeepDi
         </div>
         <div className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
           <VitalsGrid patient={patient} />
+        </div>
+      </div>
+
+      {/* Intelligent Insights Row 1 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="animate-fade-in-up" style={{ animationDelay: "300ms" }}>
+          <DigitalTwinView patient={patient} />
+        </div>
+        <div className="animate-fade-in-up" style={{ animationDelay: "400ms" }}>
+          <BehavioralSimView patient={patient} />
+        </div>
+      </div>
+
+      {/* Intelligent Insights Row 2 */}
+      <div className="grid grid-cols-1 gap-4">
+        <div className="animate-fade-in-up" style={{ animationDelay: "500ms" }}>
+          <ProtocolView patient={patient} />
         </div>
       </div>
     </div>

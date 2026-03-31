@@ -122,6 +122,34 @@ export function computeStats(records: PatientRecord[]): PopulationStats {
   }
 }
 
+export function parsePatientRecord(raw: any): PatientRecord {
+  return {
+    ...raw,
+    Diabetes: Number(raw.Diabetes || 0),
+    HighBP: Number(raw.HighBP || 0),
+    HighChol: Number(raw.HighChol || 0),
+    BMI: Number(raw.BMI || 0),
+    Smoker: Number(raw.Smoker || 0),
+    HeartDiseaseorAttack: Number(raw.HeartDiseaseorAttack || 0),
+    PhysActivity: Number(raw.PhysActivity || 0),
+    Fruits: Number(raw.Fruits || 0),
+    Veggies: Number(raw.Veggies || 0),
+    HvyAlcoholConsump: Number(raw.HvyAlcoholConsump || 0),
+    DiffWalk: Number(raw.DiffWalk || 0),
+    Sex: Number(raw.Sex || 0),
+    Age: Number(raw.Age || 0),
+    Education: Number(raw.Education || 0),
+    Income: Number(raw.Income || 0),
+    NCD_Risk: Number(raw.NCD_Risk || 0),
+    Metabolic_Risk_Index: Number(raw.Metabolic_Risk_Index || 0),
+    Clinical_Burden: Number(raw.Clinical_Burden || 0),
+    Healthy_Habits_Score: Number(raw.Healthy_Habits_Score || 0),
+    Unhealthy_Lifestyle_Index: Number(raw.Unhealthy_Lifestyle_Index || 0),
+    Physical_Mobility_Risk: Number(raw.Physical_Mobility_Risk || 0),
+    Overall_NCD_Risk: Number(raw.Overall_NCD_Risk || 0),
+  };
+}
+
 export function usePopulationData() {
   const [records, setRecords] = useState<PatientRecord[]>([])
   const [stats, setStats] = useState<PopulationStats | null>(null)
@@ -131,8 +159,9 @@ export function usePopulationData() {
   useEffect(() => {
     api.getPopulationStats()
       .then((data) => {
-        setRecords(data)
-        setStats(computeStats(data))
+        const parsed = data.map(parsePatientRecord);
+        setRecords(parsed)
+        setStats(computeStats(parsed))
       })
       .catch((err) => setError(err.message ?? "Failed to load population data"))
       .finally(() => setLoading(false))
