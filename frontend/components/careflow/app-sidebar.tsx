@@ -1,5 +1,6 @@
 "use client"
-
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Activity, Bell, LogOut, ChevronDown, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -10,23 +11,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useAppContext } from "@/lib/context"
 
-interface SidebarProps {
-  activeView: string
-  onViewChange: (view: string) => void
-  role: "NGO Admin" | "Field Worker"
-  onRoleChange: (role: "NGO Admin" | "Field Worker") => void
-}
-
-export function AppSidebar({ activeView, onViewChange, role, onRoleChange }: SidebarProps) {
+export function AppSidebar() {
+  const pathname = usePathname()
+  const { role, setRole } = useAppContext()
+  
   const navItems = [
-    { id: "dashboard", label: "Macro-Radar", icon: "📊" },
-    { id: "population", label: "Population", icon: "👥" },
-    { id: "vitals", label: "Vitals Monitor", icon: "❤️" },
-    { id: "regions", label: "Regions", icon: "🌍" },
-    { id: "settings", label: "Settings", icon: "⚙️" },
+    { id: "dashboard", href: "/dashboard", label: "Macro-Radar", icon: "📊" },
+    { id: "population", href: "/population", label: "Population", icon: "👥" },
+    { id: "vitals", href: "/vitals", label: "Vitals Monitor", icon: "❤️" },
+    { id: "regions", href: "/regions", label: "Regions", icon: "🌍" },
+    { id: "settings", href: "/settings", label: "Settings", icon: "⚙️" },
   ]
-
   return (
     <aside className="flex flex-col w-64 h-screen bg-sidebar text-sidebar-foreground border-r border-sidebar-border shrink-0">
       {/* Logo */}
@@ -63,10 +60,10 @@ export function AppSidebar({ activeView, onViewChange, role, onRoleChange }: Sid
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-48">
-            <DropdownMenuItem onClick={() => onRoleChange("NGO Admin")}>
+            <DropdownMenuItem onClick={() => setRole("NGO Admin")}>
               NGO Admin
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onRoleChange("Field Worker")}>
+            <DropdownMenuItem onClick={() => setRole("Field Worker")}>
               Field Worker
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -79,11 +76,11 @@ export function AppSidebar({ activeView, onViewChange, role, onRoleChange }: Sid
           Menu
         </p>
         {navItems.map((item) => {
-          const isActive = activeView === item.id
+          const isActive = pathname === item.href || (pathname.startsWith("/patients") && item.id === "dashboard")
           return (
-            <button
+            <Link
               key={item.id}
-              onClick={() => onViewChange(item.id)}
+              href={item.href}
               className={cn(
                 "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all",
                 isActive
@@ -98,7 +95,7 @@ export function AppSidebar({ activeView, onViewChange, role, onRoleChange }: Sid
                   47
                 </Badge>
               )}
-            </button>
+            </Link>
           )
         })}
       </nav>

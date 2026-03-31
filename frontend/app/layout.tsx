@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Poppins, JetBrains_Mono, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { Providers } from './providers'
 
 const poppins = Poppins({ 
   weight: ['400', '500', '600', '700', '800'],
@@ -51,7 +52,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${jetbrainsMono.variable} ${playfair.variable} font-sans antialiased`}>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <Analytics />
       </body>
     </html>

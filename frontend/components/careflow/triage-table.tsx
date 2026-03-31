@@ -44,7 +44,7 @@ function getRiskLevel(mri: number): RiskLevel {
  * Maps a real backend PatientRecord to the more complex Patient interface
  * used by the DeepDive, ShapChart, and VitalsGrid components.
  */
-function mapRecordToPatient(record: PatientRecord, idx: number): any {
+export function mapRecordToPatient(record: PatientRecord, idx: number): any {
   const mri = record.Metabolic_Risk_Index
   const riskLevel = getRiskLevel(mri)
   const riskScore = Math.min(99, 85 + Math.floor(mri / 50))
