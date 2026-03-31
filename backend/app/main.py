@@ -15,6 +15,7 @@ from app.features.behavioral_sim.router import router as behavioral_sim_router
 from app.features.digital_twin.router import router as digital_twin_router
 from app.features.health_agent.router import router as health_agent_router
 from app.features.adherence_monitor.router import router as adherence_router
+from app.features.bias_auditor.router import router as bias_auditor_router
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
@@ -90,6 +91,12 @@ app.include_router(
     adherence_router,
     prefix=f"{settings.API_V1_STR}/adherence",
     tags=["Adherence Monitoring"]
+)
+
+app.include_router(
+    bias_auditor_router,
+    prefix=f"{settings.API_V1_STR}/bias-auditor",
+    tags=["Bias Auditor & Compliance"]
 )
 
 @app.get("/health", tags=["System"])

@@ -127,6 +127,48 @@
                 </table>
             </div>
         </div>
+
+        <!-- Bias & Equity Audit Section -->
+        <div class="mb-10 bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-xs font-bold text-yellow-500 uppercase tracking-widest">⚖️ SAHI Compliance: Bias &
+                    Equity Audit</h3>
+                <button onclick="runAudit()" id="auditBtn"
+                    class="text-[9px] bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-4 py-2 rounded-full font-bold hover:bg-yellow-500 hover:text-slate-900 transition-all uppercase tracking-widest active:scale-95">RUN
+                    ONE-CLICK AUDIT</button>
+            </div>
+
+            <div id="auditGrid"
+                class="grid grid-cols-1 md:grid-cols-2 gap-8 opacity-40 grayscale pointer-events-none transition-all duration-700">
+                <!-- Gender Bias Section -->
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest">Gender Parity
+                            Analysis</p>
+                        <span
+                            class="text-[9px] text-blue-400 font-bold px-2 py-0.5 bg-blue-500/10 rounded border border-blue-500/20">Metric:
+                            Metabolic Risk</span>
+                    </div>
+                    <div id="genderAuditContainer" class="space-y-5">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Regulatory/Governance Interpretation -->
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700 flex flex-col">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-lg">🤖</span>
+                        <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Regulatory
+                            Interpretation</p>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center">
+                        <p id="auditAdvice" class="text-sm italic text-slate-300 leading-relaxed text-center">"Run audit
+                            to see AI analysis of data bias.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <script>
@@ -257,6 +299,55 @@
         }
 
         window.onload = loadAnalytics;
+
+        async function runAudit() {
+            const btn = document.getElementById('auditBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "AUDITING...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/v1/bias-auditor/run-audit');
+                if (!res.ok) throw new Error("Audit service unavailable");
+                const data = await res.json();
+
+                const grid = document.getElementById('auditGrid');
+                grid.classList.remove('opacity-40', 'grayscale', 'pointer-events-none');
+
+                document.getElementById('auditAdvice').innerText = `"${data.llm_governance_advice}"`;
+                document.getElementById('auditAdvice').className = "text-sm font-medium text-amber-100 italic leading-relaxed text-center animate-in fade-in slide-in-from-bottom-2 duration-700";
+
+                const genCont = document.getElementById('genderAuditContainer');
+                genCont.innerHTML = "";
+                data.gender_equity.forEach((g, idx) => {
+                    const pct = Math.min(100, (g.avg_risk_score / 50) * 100);
+                    const barColor = g.avg_risk_score > 30 ? 'bg-red-500' : (g.avg_risk_score > 20 ? 'bg-yellow-500' : 'bg-blue-500');
+
+                    setTimeout(() => {
+                        genCont.innerHTML += `
+                        <div class="space-y-1.5 animate-in fade-in slide-in-from-left duration-500" style="animation-delay: ${idx * 150}ms">
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <span class="text-[10px] font-black text-slate-100 uppercase tracking-tight">${g.group_name}</span>
+                                    <span class="text-[9px] text-slate-500 ml-2">Pop: ${g.population_percentage}%</span>
+                                </div>
+                                <span class="text-[10px] font-black ${g.avg_risk_score > 30 ? 'text-red-400' : 'text-slate-300'}">${g.avg_risk_score.toFixed(1)} <span class="text-[8px] font-normal text-slate-500">AVG RISK</span></span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-700/50 shadow-inner">
+                                <div class="h-full ${barColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-all duration-1000 ease-out" style="width: ${pct}%"></div>
+                            </div>
+                        </div>`;
+                    }, idx * 100);
+                });
+
+                btn.innerText = "AUDIT COMPLETE ✅";
+                btn.className = "text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-4 py-2 rounded-full font-bold uppercase tracking-widest cursor-default";
+            } catch (err) {
+                console.error("Audit Fail:", err);
+                btn.innerText = "AUDIT FAILED ❌";
+                btn.disabled = false;
+            }
+        }
     </script>
 </body>
 

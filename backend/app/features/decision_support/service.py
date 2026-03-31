@@ -15,6 +15,9 @@ class DecisionSupportService:
         # Fetch adherence context for the patient
         adherence = adherence_service.get_patient_summary(data.patient_id)
         adherence_context = f"Patient Adherence Index: {adherence.adherence_index}% (Status: {adherence.current_status})."
+        if adherence.recent_logs:
+            details = "; ".join([f"On {l['date']} took {l['meds'] or 'None'} and did {l['exercise'] or 'None'}" for l in adherence.recent_logs[-3:]])
+            adherence_context += f" Recent Activity: {details}"
 
         prompt = f"""
         You are CareFlow AI, a clinical decision support AI.

@@ -50,6 +50,17 @@ class AdherenceService:
         # Simple trend detection
         trend = "Improving" if len(data) > 1 and index >= 50 else "Declining"
         
-        return AdherenceSummary(adherence_index=round(index, 2), current_status=status, trend=trend)
+        # Factor in detailed history
+        recent_history = [
+            {"date": str(r.get('log_date')), "meds": r.get('meds_detail'), "exercise": r.get('exercise_detail')} 
+            for r in data[-10:] if r.get('meds_detail') or r.get('exercise_detail')
+        ]
+        
+        return AdherenceSummary(
+            adherence_index=round(index, 2), 
+            current_status=status, 
+            trend=trend,
+            recent_logs=recent_history
+        )
 
 adherence_service = AdherenceService()

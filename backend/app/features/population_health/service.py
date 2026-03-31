@@ -58,8 +58,14 @@ class PopulationHealthService:
             return False
 
     async def get_stats(self) -> PopulationStats:
-        """Backward-compatible dashboard stats endpoint."""
-        groups = await self.get_population_data(source="mongo", location_field="phc")
+        """Backward-compatible dashboard stats endpoint with Mongo -> CSV Fallback."""
+        # 1. Try Mongo first
+        groups = await self.get_population_data(source="mongo", location_field="phc") or []
+        
+        # 2. Fallback to CSV if Mongo is empty/unavailable
+        if not groups:
+            groups = await self.get_population_data(source="csv", location_field="phc")
+            
         total = sum(item.population for item in groups)
         distribution = {"Red": 0, "Yellow": 0, "Green": 0}
         weighted_risk_sum = 0.0
