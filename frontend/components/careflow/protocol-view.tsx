@@ -19,6 +19,7 @@ export function ProtocolView({ patient }: ProtocolViewProps) {
 
   useEffect(() => {
     const input: PatientClinicalData = {
+      patient_id: patient.id,
       age: patient.age,
       gender: patient.gender,
       vitals: {
@@ -42,7 +43,14 @@ export function ProtocolView({ patient }: ProtocolViewProps) {
   }, [patient])
 
   if (loading) return <div className="h-48 flex items-center justify-center text-xs text-muted-foreground uppercase tracking-widest animate-pulse">Generating WHO Protocol...</div>
-  if (error || !data) return <div className="h-48 flex items-center justify-center text-xs text-risk-critical uppercase tracking-widest font-bold text-center p-6">Protocol Engine Offline</div>
+  if (error || !data) return (
+    <div className="h-48 flex items-center justify-center">
+      <div className="p-4 rounded-xl border border-risk-critical/30 bg-risk-critical/10 flex flex-col items-center justify-center space-y-1 animate-fade-in-up w-full max-w-sm">
+        <span className="text-xs text-risk-critical font-bold uppercase tracking-widest text-center">Protocol Engine Offline</span>
+        <span className="text-[10px] text-muted-foreground text-center">Could not generate clinical guidelines.</span>
+      </div>
+    </div>
+  )
 
   return (
     <div className="glass-card rounded-2xl p-6 space-y-6">

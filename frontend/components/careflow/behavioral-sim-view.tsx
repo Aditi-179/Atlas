@@ -22,6 +22,7 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
   })
   const [result, setResult] = useState<SimulationResponse | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const runSim = async () => {
     const input: RiskPredictionInput = {
@@ -40,12 +41,15 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
     }
 
     setLoading(true)
+    setError(null)
     try {
       const res = await api.runBehavioralSim({
         current_state: input,
         modified_habits: habits
       })
       setResult(res)
+    } catch (err: any) {
+      setError(err.message ?? "Simulation failed")
     } finally {
       setLoading(false)
     }
@@ -112,7 +116,14 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
         </div>
       </div>
 
-      {result && (
+      {error && (
+        <div className="p-4 rounded-xl border border-risk-critical/30 bg-risk-critical/10 flex flex-col items-center justify-center space-y-1 animate-fade-in-up">
+           <span className="text-xs text-risk-critical font-bold uppercase tracking-widest text-center">Simulation Error</span>
+           <span className="text-[10px] text-muted-foreground text-center">Could not reach the AI simulation engine.</span>
+        </div>
+      )}
+
+      {result && !error && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in-up">
           <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 flex flex-col items-center justify-center space-y-1">
              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Simulated Risk Score</span>
@@ -131,7 +142,7 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
         </div>
       )}
 
-      {result && (
+      {result && !error && (
         <div className="p-4 rounded-xl bg-muted/50 border border-border text-xs text-foreground leading-relaxed italic opacity-90 text-center">
            "{result.impact_message}"
         </div>

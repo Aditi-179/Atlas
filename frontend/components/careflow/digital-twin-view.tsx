@@ -50,7 +50,14 @@ export function DigitalTwinView({ patient }: DigitalTwinViewProps) {
   }, [patient])
 
   if (loading) return <div className="h-64 flex items-center justify-center text-xs text-muted-foreground uppercase tracking-widest animate-pulse">Computing Trajectories...</div>
-  if (error || !data) return <div className="h-64 flex items-center justify-center text-xs text-risk-critical uppercase tracking-widest font-bold">Projection Failed</div>
+  if (error || !data) return (
+    <div className="h-64 flex items-center justify-center">
+      <div className="p-4 rounded-xl border border-risk-critical/30 bg-risk-critical/10 flex flex-col items-center justify-center space-y-1 animate-fade-in-up w-full max-w-sm">
+        <span className="text-xs text-risk-critical font-bold uppercase tracking-widest text-center">Projection Failed</span>
+        <span className="text-[10px] text-muted-foreground text-center">Could not generate digital twin trajectory.</span>
+      </div>
+    </div>
+  )
 
   const chartData = data.baseline_trajectory.map((base, i) => ({
     month: `M${base.month}`,

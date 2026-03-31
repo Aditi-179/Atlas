@@ -137,7 +137,7 @@ export const api = {
   // BEHAVIORAL SIMULATION
   // ------------------------------------------
   async runBehavioralSim(data: SimulationRequest): Promise<SimulationResponse> {
-    const res = await fetch(`${API_BASE_URL}/behavioral_sim/run`, {
+    const res = await fetch(`${API_BASE_URL}/behavioral-sim/run`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
