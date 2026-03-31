@@ -7,6 +7,7 @@ import { VitalsGrid } from "./vitals-grid"
 import { DigitalTwinView } from "./digital-twin-view"
 import { BehavioralSimView } from "./behavioral-sim-view"
 import { ProtocolView } from "./protocol-view"
+import { AdherenceCard } from "./adherence-card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar, AlertTriangle, CheckCircle, Clock, Send } from "lucide-react"
@@ -141,6 +142,12 @@ export function PatientDeepDive({ patient, onBack, onAskCopilot }: PatientDeepDi
         <div className="animate-fade-in-up" style={{ animationDelay: "300ms" }}>
           <DigitalTwinView patient={patient} />
         </div>
+        <div className="animate-fade-in-up" style={{ animationDelay: "350ms" }}>
+          <AdherenceCard patientId={patient.id} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4">
         <div className="animate-fade-in-up" style={{ animationDelay: "400ms" }}>
           <BehavioralSimView patient={patient} />
         </div>

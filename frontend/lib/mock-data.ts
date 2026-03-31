@@ -25,6 +25,8 @@ export interface Patient {
   dispatchStatus: "Dispatched" | "Pending" | "Reviewed" | "Urgent"
   shapFeatures: ShapFeature[]
   vitals: Vitals
+  hvyAlcohol: number
+  veggies: number
   lastVisit: string
 }
 
@@ -40,6 +42,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "Smoking",
     dispatchStatus: "Urgent",
     lastVisit: "2024-01-08",
+    hvyAlcohol: 0,
+    veggies: 0,
     shapFeatures: [
       { feature: "Smoking (20 yrs)", value: 22, rawValue: "Yes — Heavy" },
       { feature: "High BP (Stage 2)", value: 18, rawValue: "158/96 mmHg" },
@@ -67,6 +71,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "Hypertension",
     dispatchStatus: "Dispatched",
     lastVisit: "2024-01-11",
+    hvyAlcohol: 0,
+    veggies: 1,
     shapFeatures: [
       { feature: "High BP (Stage 2)", value: 24, rawValue: "165/102 mmHg" },
       { feature: "Diabetes Risk", value: 16, rawValue: "FBG 121 mg/dL" },
@@ -94,6 +100,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "Diabetes Risk",
     dispatchStatus: "Pending",
     lastVisit: "2024-01-05",
+    hvyAlcohol: 0,
+    veggies: 0,
     shapFeatures: [
       { feature: "Blood Sugar (High)", value: 20, rawValue: "FBG 138 mg/dL" },
       { feature: "Age (61)", value: 17, rawValue: "61 years" },
@@ -121,6 +129,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "High BMI",
     dispatchStatus: "Reviewed",
     lastVisit: "2024-01-14",
+    hvyAlcohol: 1,
+    veggies: 0,
     shapFeatures: [
       { feature: "High BMI", value: 18, rawValue: "BMI 34.2" },
       { feature: "Low Activity", value: 12, rawValue: "20 min/week" },
@@ -148,6 +158,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "Smoking",
     dispatchStatus: "Pending",
     lastVisit: "2024-01-10",
+    hvyAlcohol: 0,
+    veggies: 1,
     shapFeatures: [
       { feature: "Smoking (8 yrs)", value: 15, rawValue: "Yes — Light" },
       { feature: "Age (45)", value: 8, rawValue: "45 years" },
@@ -174,6 +186,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "Mild BP Elevation",
     dispatchStatus: "Reviewed",
     lastVisit: "2024-01-15",
+    hvyAlcohol: 0,
+    veggies: 1,
     shapFeatures: [
       { feature: "Mild BP Elevation", value: 10, rawValue: "128/80 mmHg" },
       { feature: "Age (33)", value: 3, rawValue: "33 years" },
@@ -200,6 +214,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "Diabetes Risk",
     dispatchStatus: "Urgent",
     lastVisit: "2024-01-03",
+    hvyAlcohol: 0,
+    veggies: 1,
     shapFeatures: [
       { feature: "Blood Sugar (High)", value: 19, rawValue: "FBG 131 mg/dL" },
       { feature: "Age (52)", value: 14, rawValue: "52 years" },
@@ -227,6 +243,8 @@ export const patients: Patient[] = [
     primaryRiskFactor: "High BMI",
     dispatchStatus: "Pending",
     lastVisit: "2024-01-12",
+    hvyAlcohol: 0,
+    veggies: 0,
     shapFeatures: [
       { feature: "High BMI", value: 14, rawValue: "BMI 28.9" },
       { feature: "Low Activity", value: 9, rawValue: "60 min/week" },

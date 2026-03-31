@@ -79,6 +79,7 @@ export interface RAGInsightResponse {
 // POPULATION HEALTH TYPES
 // ==========================================
 export interface PatientRecord {
+  Patient_ID: string;
   Diabetes: number;
   HighBP: number;
   HighChol: number;
@@ -230,4 +231,41 @@ export interface PopulationSimulationRequest {
   csv_path?: string;
   forecast_months?: number;
   intervention: InterventionConfig;
+}
+
+// ==========================================
+// ADHERENCE MONITOR TYPES
+// ==========================================
+export interface AdherenceLog {
+  patient_id: string;
+  log_date: string; // ISO date string
+  took_meds: boolean;
+  healthy_diet: boolean;
+  exercised: boolean;
+  meds_detail?: string;
+  exercise_detail?: string;
+}
+
+export interface AdherenceSummary {
+  adherence_index: number; // Percentage (0-100)
+  current_status: string;  // "Stable", "At Risk", "Critical"
+  trend: string;           // "Improving" or "Declining"
+  recent_logs: any[];
+}
+
+// ==========================================
+// BIAS AUDITOR TYPES
+// ==========================================
+export interface EquityMetric {
+  group_name: string;
+  avg_risk_score: number;
+  population_percentage: number;
+  disparate_impact_ratio: number;
+}
+
+export interface AuditReport {
+  gender_equity: EquityMetric[];
+  income_equity: EquityMetric[];
+  overall_fairness_score: number;
+  llm_governance_advice: string;
 }

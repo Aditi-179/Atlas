@@ -89,7 +89,7 @@ export function mapRecordToPatient(record: PatientRecord, idx: number): any {
   }
 
   return {
-    id: `p-${idx}`,
+    id: record.Patient_ID || `p-${idx}`,
     name: record.Patient_Name,
     age: (record.Age * 5) + 15,
     gender: record.Sex === 1 ? "M" : "F",
@@ -100,6 +100,8 @@ export function mapRecordToPatient(record: PatientRecord, idx: number): any {
     dispatchStatus: riskLevel === "critical" ? "Urgent" : "Pending",
     shapFeatures: shapFeatures.sort((a, b) => Math.abs(b.value) - Math.abs(a.value)),
     vitals: vitals,
+    hvyAlcohol: record.HvyAlcoholConsump,
+    veggies: record.Veggies,
     lastVisit: "2024-03-30"
   }
 }
@@ -126,12 +128,13 @@ export function TriageTable({ records, selectedPatientId, onSelectPatient }: Tri
   const [sortDesc, setSortDesc] = useState(true)
 
   const filtered = records
+    .map((record, originalIdx) => ({ record, originalIdx }))
     .filter(
-      (p) =>
-        p.Patient_Name.toLowerCase().includes(search.toLowerCase()) ||
-        p.City.toLowerCase().includes(search.toLowerCase())
+      ({ record }) =>
+        record.Patient_Name.toLowerCase().includes(search.toLowerCase()) ||
+        record.City.toLowerCase().includes(search.toLowerCase())
     )
-    .sort((a, b) => (sortDesc ? b.Metabolic_Risk_Index - a.Metabolic_Risk_Index : a.Metabolic_Risk_Index - b.Metabolic_Risk_Index))
+    .sort((a, b) => (sortDesc ? b.record.Metabolic_Risk_Index - a.record.Metabolic_Risk_Index : a.record.Metabolic_Risk_Index - b.record.Metabolic_Risk_Index))
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const pageData = filtered.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE)
@@ -183,8 +186,8 @@ export function TriageTable({ records, selectedPatientId, onSelectPatient }: Tri
             </tr>
           </thead>
           <tbody>
-            {pageData.map((record, idx) => {
-              const patient = mapRecordToPatient(record, idx)
+            {pageData.map(({ record, originalIdx }) => {
+              const patient = mapRecordToPatient(record, originalIdx)
               const risk = riskConfig[patient.riskLevel as RiskLevel]
               const riskScore = patient.riskScore
               const mri = record.Metabolic_Risk_Index
@@ -192,7 +195,7 @@ export function TriageTable({ records, selectedPatientId, onSelectPatient }: Tri
 
               return (
                 <tr
-                  key={idx}
+                  key={originalIdx}
                   onClick={() => onSelectPatient(patient)}
                   className={cn(
                     "border-b border-border/40 cursor-pointer transition-all duration-200 hover:bg-primary/[0.02]"
@@ -214,7 +217,7 @@ export function TriageTable({ records, selectedPatientId, onSelectPatient }: Tri
                       </div>
                       <div>
                         <p className="text-xs font-bold text-foreground tracking-tight">{patient.name}</p>
-                        <p className="text-[10px] text-muted-foreground font-mono uppercase opacity-70">UID-{idx + 101}</p>
+                        <p className="text-[10px] text-muted-foreground font-mono uppercase opacity-70">{patient.id}</p>
                       </div>
                     </div>
                   </td>

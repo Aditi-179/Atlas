@@ -1,141 +1,45 @@
 {
-    "P_DEMO_001": [
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": true,
-            "healthy_diet": false,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": true,
-            "healthy_diet": false,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": true,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": true,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": true,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": false,
-            "exercised": true
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": true,
-            "healthy_diet": false,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": true,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": true,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": false,
-            "exercised": true
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": true,
-            "healthy_diet": false,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": true,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": true,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": false,
-            "exercised": true
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": false,
-            "exercised": true
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": false,
-            "exercised": true
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": true,
-            "healthy_diet": false,
-            "exercised": false
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": true,
-            "healthy_diet": false,
-            "exercised": false,
-            "meds_detail": "mycovita",
-            "exercise_detail": null
-        },
-        {
-            "patient_id": "P_DEMO_001",
-            "log_date": "2026-03-31",
-            "took_meds": false,
-            "healthy_diet": false,
-            "exercised": true,
-            "meds_detail": null,
-            "exercise_detail": "walk for 30 mins"
-        }
+    "PAT-0708": [
+        {"patient_id": "PAT-0708", "log_date": "2026-03-28", "took_meds": true, "healthy_diet": true, "exercised": false, "meds_detail": "Evening dose skipped", "exercise_detail": null},
+        {"patient_id": "PAT-0708", "log_date": "2026-03-29", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "All doses taken", "exercise_detail": "15min walk"},
+        {"patient_id": "PAT-0708", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "All doses taken", "exercise_detail": "30min light cardio"}
+    ],
+    "PAT-0462": [
+        {"patient_id": "PAT-0462", "log_date": "2026-03-29", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "Morning BP meds", "exercise_detail": "Walking in park"},
+        {"patient_id": "PAT-0462", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": false, "exercised": true, "meds_detail": "All doses taken", "exercise_detail": "30min jogging"}
+    ],
+    "PAT-0367": [
+        {"patient_id": "PAT-0367", "log_date": "2026-03-30", "took_meds": false, "healthy_diet": true, "exercised": false, "meds_detail": "Missed afternoon dose", "exercise_detail": null}
+    ],
+    "PAT-0592": [
+        {"patient_id": "PAT-0592", "log_date": "2026-03-28", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "On track", "exercise_detail": "Daily workout"},
+        {"patient_id": "PAT-0592", "log_date": "2026-03-29", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "On track", "exercise_detail": "Daily workout"},
+        {"patient_id": "PAT-0592", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "On track", "exercise_detail": "Daily workout"}
+    ],
+    "PAT-0746": [
+        {"patient_id": "PAT-0746", "log_date": "2026-03-29", "took_meds": true, "healthy_diet": true, "exercised": false, "meds_detail": "Normal", "exercise_detail": null}
+    ],
+    "PAT-0794": [
+        {"patient_id": "PAT-0794", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": false, "exercised": false, "meds_detail": "Normal", "exercise_detail": null}
+    ],
+    "PAT-0070": [
+        {"patient_id": "PAT-0070", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "Full compliance", "exercise_detail": "Swimming session"}
+    ],
+    "PAT-0715": [
+        {"patient_id": "PAT-0715", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "All doses", "exercise_detail": "Yoga"}
+    ],
+    "PAT-0624": [
+        {"patient_id": "PAT-0624", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": true, "exercised": false, "meds_detail": "All doses", "exercise_detail": null}
+    ],
+    "PAT-0320": [
+        {"patient_id": "PAT-0320", "log_date": "2026-03-30", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "On track", "exercise_detail": "Gardening 1hr"}
+    ],
+    "PAT-0001": [
+        {"patient_id": "PAT-0001", "log_date": "2026-03-24", "took_meds": true, "healthy_diet": true, "exercised": false, "meds_detail": "Morning BP meds taken", "exercise_detail": null},
+        {"patient_id": "PAT-0001", "log_date": "2026-03-25", "took_meds": true, "healthy_diet": false, "exercised": true, "meds_detail": "All doses taken", "exercise_detail": "30min brisk walk"},
+        {"patient_id": "PAT-0001", "log_date": "2026-03-26", "took_meds": true, "healthy_diet": true, "exercised": true, "meds_detail": "Morning and evening", "exercise_detail": "Evening yoga"}
+    ],
+    "PAT-0002": [
+        {"patient_id": "PAT-0002", "log_date": "2026-03-25", "took_meds": false, "healthy_diet": true, "exercised": false, "meds_detail": "Missed morning dose", "exercise_detail": null}
     ]
 }

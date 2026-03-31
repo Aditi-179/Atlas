@@ -1,6 +1,7 @@
 "use client"
 
 import { usePopulationData } from "@/lib/hooks/usePopulationData"
+import { EquityAuditSection } from "@/components/careflow/equity-audit-section"
 
 export default function PopulationPage() {
   const { stats, loading: statsLoading } = usePopulationData()
@@ -49,6 +50,8 @@ export default function PopulationPage() {
           </div>
         </div>
       )}
+
+      {!statsLoading && <EquityAuditSection />}
     </div>
   )
 }

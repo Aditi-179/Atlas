@@ -18,9 +18,12 @@ export default function PatientPage() {
   useEffect(() => {
     if (records.length === 0 || !params.id) return
 
-    const idx = parseInt((params.id as string).replace('p-', ''))
-    if (!isNaN(idx) && records[idx]) {
-      const p = mapRecordToPatient(records[idx], idx)
+    const id = params.id as string
+    const targetRecord = records.find(r => r.Patient_ID === id)
+    const recordIndex = records.findIndex(r => r.Patient_ID === id)
+
+    if (targetRecord) {
+      const p = mapRecordToPatient(targetRecord, recordIndex)
       setPatient(p)
       setSelectedPatient(p) // Sync with Copilot Sidebar
     }

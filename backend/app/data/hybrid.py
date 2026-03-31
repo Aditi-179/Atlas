@@ -3,21 +3,24 @@ import pickle
 from faker import Faker
 import os
 
-fake = Faker()
 
 # 1. Load your master data
 # Taking a sample of 1000 for the demo dashboard
-df = pd.read_csv('ncd_dataset_final_clean.csv').sample(1000, random_state=42)
+df = pd.read_csv('app/data/ncd_dataset_final_clean.csv').sample(1000, random_state=42)
 
 # 2. THE HYBRID HACK: Generate Names, Phones, and Locations
+Faker.seed(42) # Seed to ensure same names are generated for the frontend
+fake = Faker()
+
+df['Patient_ID'] = [f"PAT-{i+1:04d}" for i in range(len(df))]
 df['Patient_Name'] = [fake.name() for _ in range(len(df))]
 df['Phone_Number'] = [f"+91 {fake.msisdn()[3:]}" for _ in range(len(df))] 
 df['City'] = [fake.city() for _ in range(len(df))]
 
 # 3. LOAD THE UNIFIED XGBOOST MODEL & COLUMNS
 # Assuming files are in the 'models' folder
-model_path = '../models/artifacts/xgb_model.pkl'
-columns_path = '../models/artifacts/xgb_columns.pkl'
+model_path = 'app/models/artifacts/xgb_model.pkl'
+columns_path = 'app/models/artifacts/xgb_columns.pkl'
 
 with open(model_path, 'rb') as f:
     xgb_model = pickle.load(f)
@@ -50,8 +53,8 @@ if 'Sex' in df.columns:
     df['Gender'] = df['Sex'].map({0: "Female", 1: "Male"})
 
 # 6. Save final demo CSV
-os.makedirs('data', exist_ok=True)
-df.to_csv('ui_final_demo_data.csv', index=False)
+# Ensure it goes to the app/data folder the backend expects
+df.to_csv('app/data/ui_final_demo_data.csv', index=False)
 
 print("✅ Success! 'ui_final_demo_data.csv' is ready for your Next.js frontend.")
 print(f"Features used by model: {trained_columns}")

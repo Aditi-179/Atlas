@@ -18,7 +18,8 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
   const [habits, setHabits] = useState({
     Smoker: patient.shapFeatures.some(f => f.feature.includes("Smoking") && f.value > 0) ? 1 : 0,
     PhysActivity: patient.vitals.physicalActivity.value >= 90 ? 1 : 0,
-    Veggies: 1,
+    Veggies: patient.veggies || 0,
+    HvyAlcoholConsump: patient.hvyAlcohol || 0,
   })
   const [result, setResult] = useState<SimulationResponse | null>(null)
   const [loading, setLoading] = useState(false)
@@ -32,10 +33,10 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
       DiffWalk: 0,
       Age: Math.floor((patient.age - 15) / 5),
       Sex: patient.gender === "M" ? 1 : 0,
-      Smoker: patient.shapFeatures.some(f => f.feature.includes("Smoking") && f.value > 0) ? 1 : 0,
+      Smoker: patient.hvyAlcohol !== undefined ? (patient.shapFeatures.some(f => f.feature.includes("Smoking") && f.value > 0) ? 1 : 0) : 1, // Fallback logic
       PhysActivity: patient.vitals.physicalActivity.value >= 90 ? 1 : 0,
-      Veggies: 1,
-      HvyAlcoholConsump: 0,
+      Veggies: patient.veggies || 0,
+      HvyAlcoholConsump: patient.hvyAlcohol || 0,
       Income: 5,
       Education: 4
     }
@@ -83,21 +84,21 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/50">
           <div className="flex items-center gap-2">
             <Cigarette className="w-3.5 h-3.5 text-muted-foreground" />
-            <Label className="text-xs font-semibold">Smoker</Label>
+            <Label className="text-xs font-semibold">Quit Smoking</Label>
           </div>
           <Switch 
-            checked={habits.Smoker === 1} 
-            onCheckedChange={(c) => setHabits(prev => ({ ...prev, Smoker: c ? 1 : 0 }))} 
+            checked={habits.Smoker === 0} 
+            onCheckedChange={(c) => setHabits(prev => ({ ...prev, Smoker: c ? 0 : 1 }))} 
           />
         </div>
         <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/50">
           <div className="flex items-center gap-2">
             <Activity className="w-3.5 h-3.5 text-muted-foreground" />
-            <Label className="text-xs font-semibold">Exercise</Label>
+            <Label className="text-xs font-semibold">Exercise Regularly</Label>
           </div>
           <Switch 
             checked={habits.PhysActivity === 1} 
@@ -107,11 +108,21 @@ export function BehavioralSimView({ patient }: BehavioralSimViewProps) {
         <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/50">
           <div className="flex items-center gap-2">
             <Utensils className="w-3.5 h-3.5 text-muted-foreground" />
-            <Label className="text-xs font-semibold">Healthy Diet</Label>
+            <Label className="text-xs font-semibold">Eat Vegetables Daily</Label>
           </div>
           <Switch 
             checked={habits.Veggies === 1} 
             onCheckedChange={(c) => setHabits(prev => ({ ...prev, Veggies: c ? 1 : 0 }))} 
+          />
+        </div>
+        <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/50">
+          <div className="flex items-center gap-2">
+            <RefreshCcw className="w-3.5 h-3.5 text-muted-foreground" />
+            <Label className="text-xs font-semibold">Reduce Alcohol</Label>
+          </div>
+          <Switch 
+            checked={habits.HvyAlcoholConsump === 0} 
+            onCheckedChange={(c) => setHabits(prev => ({ ...prev, HvyAlcoholConsump: c ? 0 : 1 }))} 
           />
         </div>
       </div>

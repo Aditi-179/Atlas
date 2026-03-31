@@ -19,6 +19,9 @@ import {
   DigitalTwinResponse,
   VoiceInput,
   HealthAgentResponse,
+  AdherenceLog,
+  AdherenceSummary,
+  AuditReport,
 } from './types';
 
 // Assuming the FastAPI backend runs on localhost:8000
@@ -169,6 +172,40 @@ export const api = {
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error("Health Agent failed to process voice");
+    return res.json();
+  },
+
+  // ------------------------------------------
+  // ADHERENCE MONITOR
+  // ------------------------------------------
+  async logAdherence(data: AdherenceLog): Promise<any> {
+    const res = await fetch(`${API_BASE_URL}/adherence/log`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to log adherence");
+    return res.json();
+  },
+
+  async getAdherenceSummary(patientId: string): Promise<AdherenceSummary> {
+    const res = await fetch(`${API_BASE_URL}/adherence/summary/${patientId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) throw new Error("Failed to fetch adherence summary");
+    return res.json();
+  },
+
+  // ------------------------------------------
+  // BIAS AUDITOR
+  // ------------------------------------------
+  async runBiasAudit(): Promise<AuditReport> {
+    const res = await fetch(`${API_BASE_URL}/bias-auditor/run-audit`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) throw new Error("Failed to run equity audit");
     return res.json();
   },
 }

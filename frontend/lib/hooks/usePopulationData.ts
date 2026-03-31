@@ -147,6 +147,7 @@ export function parsePatientRecord(raw: any): PatientRecord {
     Unhealthy_Lifestyle_Index: Number(raw.Unhealthy_Lifestyle_Index || 0),
     Physical_Mobility_Risk: Number(raw.Physical_Mobility_Risk || 0),
     Overall_NCD_Risk: Number(raw.Overall_NCD_Risk || 0),
+    Patient_ID: String(raw.Patient_ID || ""),
   };
 }
 
