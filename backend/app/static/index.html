@@ -313,90 +313,6 @@
                         <div id="llmSteps" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
                 </div>
-
-                <!-- RAG Insights -->
-                <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-xl mt-6">
-                    <div class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
-                        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                            <span class="text-lg">📚</span> Contextual RAG Insights</h3>
-                        <span id="rag-status"
-                            class="text-[10px] bg-slate-900 px-3 py-1 rounded-full text-slate-500 font-bold uppercase transition-all">Ready</span>
-                    </div>
-
-                    <div id="ragContent" class="opacity-30 transition-all duration-500 space-y-6">
-                        <p id="ragSummary"
-                            class="text-md font-medium text-slate-200 mb-4 border-l-4 border-amber-500 pl-4 leading-relaxed">
-                        </p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-900/50 p-5 rounded-2xl border border-slate-700 shadow-inner">
-                                <h4 class="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-4">Primary
-                                    Risk Factors</h4>
-                                <div id="ragFactors" class="flex flex-wrap"></div>
-                            </div>
-                            <div class="bg-slate-900/50 p-5 rounded-2xl border border-slate-700 shadow-inner">
-                                <h4 class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-4">Clinical
-                                    Guidelines</h4>
-                                <ul id="ragGuidelines" class="list-none space-y-3 m-0 p-0"></ul>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-gradient-to-r from-indigo-900/40 to-slate-900/40 p-5 rounded-2xl border border-indigo-500/30">
-                            <h4
-                                class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                <span>🎯</span> Recommended Action</h4>
-                            <p id="ragRecommendation" class="text-sm text-indigo-100 italic"></p>
-                        </div>
-
-                        <!-- COPILOT CHAT BOX -->
-                        <div class="mt-4 flex gap-3">
-                            <input type="text" id="ragQueryInput"
-                                placeholder="Ask Aegis Copilot a specific question about this patient (e.g., 'What are their immediate cardiovascular risks?')..."
-                                class="flex-1 bg-slate-900 border border-slate-700 focus:border-amber-500/50 rounded-xl px-5 py-3 text-sm text-slate-200 outline-none transition-all shadow-inner placeholder-slate-600">
-                            <button type="button" onclick="askRagCopilot()"
-                                class="bg-amber-600/90 hover:bg-amber-500 text-white px-6 py-3 rounded-xl text-xs font-black tracking-widest transition-colors shadow-lg shadow-amber-900/20 active:scale-95">ASK
-                                COPILOT</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RAG Insights -->
-                <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-xl mt-6">
-                    <div class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
-                        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                            <span class="text-lg">📚</span> Contextual RAG Insights</h3>
-                        <span id="rag-status"
-                            class="text-[10px] bg-slate-900 px-3 py-1 rounded-full text-slate-500 font-bold uppercase transition-all">Ready</span>
-                    </div>
-
-                    <div id="ragContent" class="opacity-30 transition-all duration-500 space-y-6">
-                        <p id="ragSummary"
-                            class="text-md font-medium text-slate-200 mb-4 border-l-4 border-amber-500 pl-4 leading-relaxed">
-                        </p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-900/50 p-5 rounded-2xl border border-slate-700 shadow-inner">
-                                <h4 class="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-4">Primary
-                                    Risk Factors</h4>
-                                <div id="ragFactors" class="flex flex-wrap"></div>
-                            </div>
-                            <div class="bg-slate-900/50 p-5 rounded-2xl border border-slate-700 shadow-inner">
-                                <h4 class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-4">Clinical
-                                    Guidelines</h4>
-                                <ul id="ragGuidelines" class="list-none space-y-3 m-0 p-0"></ul>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-gradient-to-r from-indigo-900/40 to-slate-900/40 p-5 rounded-2xl border border-indigo-500/30">
-                            <h4
-                                class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                <span>🎯</span> Recommended Action</h4>
-                            <p id="ragRecommendation" class="text-sm text-indigo-100 italic"></p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -710,117 +626,9 @@
                     stepsCont.innerHTML += `<div class="bg-slate-900/50 p-5 rounded-2xl border border-slate-700"> <div class="flex justify-between items-center mb-3"><span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">${step.category}</span><span class="text-[9px] bg-slate-800 px-2.5 py-1 rounded-lg text-slate-400 border border-slate-700 uppercase">${step.urgency}</span></div><p class="text-[13px] text-slate-300 leading-relaxed mb-4">${step.action}</p><p class="text-[9px] text-slate-600 italic">Source: ${step.evidence_citation}</p></div>`;
                 });
 
-                try {
-                    document.getElementById('rag-status').innerText = 'Running...';
-                    document.getElementById('rag-status').classList.remove('bg-slate-900', 'text-slate-500');
-                    document.getElementById('rag-status').classList.add('bg-amber-500/20', 'text-amber-400', 'animate-pulse');
-                    const ragRes = await fetch('/api/v1/rag/insights', {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ bmi: patientData.BMI, age: rawAge, high_bp: patientData.HighBP, high_chol: patientData.HighChol, smoker: patientData.Smoker, phys_activity: patientData.PhysActivity, hvy_alcohol: patientData.HvyAlcoholConsump, ncd_risk_probability: (risk.risk_probability || (risk.risk_score / 100)), risk_tier: risk.risk_tier })
-                    });
-                    const rag = await ragRes.json();
-
-                    document.getElementById('ragContent').classList.remove('opacity-30');
-                    document.getElementById('ragSummary').innerText = rag.analysis_summary;
-                    document.getElementById('ragRecommendation').innerText = rag.recommended_action;
-
-                    const guidelinesCont = document.getElementById('ragGuidelines'); guidelinesCont.innerHTML = "";
-                    rag.clinical_guidelines.forEach(g => guidelinesCont.innerHTML += `<li class="text-xs text-slate-300 leading-relaxed"><span class="text-amber-500 mr-2">✦</span>${g}</li>`);
-
-                    const factorsCont = document.getElementById('ragFactors'); factorsCont.innerHTML = "";
-                    rag.primary_risk_factors.forEach(f => factorsCont.innerHTML += `<span class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-[11px] font-bold tracking-wide mr-2 mb-2 inline-block shadow-sm">${f}</span>`);
-
-                    document.getElementById('rag-status').innerText = 'Active';
-                    document.getElementById('rag-status').classList.remove('animate-pulse', 'bg-amber-500/20', 'text-amber-400');
-                    document.getElementById('rag-status').classList.add('bg-emerald-500/20', 'text-emerald-400');
-                } catch (e) {
-                    console.error(e);
-                    document.getElementById('rag-status').innerText = 'Error';
-                }
-
                 updateHeaderCount();
                 fetchAdherenceSummary();
             } catch (err) { console.error(err); } finally { btn.disabled = false; btnText.innerText = "EXECUTE AI PIPELINE"; loader.classList.add('hidden'); }
-        }
-
-        async function fetchAdherenceSummary() {
-            try {
-                const res = await fetch(`/api/v1/adherence/summary/P_DEMO_001`);
-                const data = await res.json();
-                document.getElementById('adherenceScore').innerText = `${data.adherence_index}%`;
-                const status = document.getElementById('adherence-status');
-                status.innerText = data.current_status;
-
-                // Color coding
-                status.className = "text-[10px] px-3 py-1 rounded-full font-bold uppercase transition-all ";
-                if (data.current_status === 'Critical') status.classList.add('bg-red-500/20', 'text-red-400');
-                else if (data.current_status === 'At Risk') status.classList.add('bg-yellow-500/20', 'text-yellow-400');
-                else status.classList.add('bg-emerald-500/20', 'text-emerald-400');
-
-                if (data.adherence_index < 50) document.getElementById('adherenceScore').className = "text-4xl font-black text-red-500";
-                else if (data.adherence_index < 80) document.getElementById('adherenceScore').className = "text-4xl font-black text-yellow-500";
-                else document.getElementById('adherenceScore').className = "text-4xl font-black text-emerald-400";
-            } catch (e) { console.error(e); }
-        }
-
-        async function logActivity(type) {
-            const btn = { meds: 'logMeds', diet: 'logDiet', exercise: 'logExercise' }[type];
-            document.getElementById(btn).classList.add('bg-blue-600/50', 'border-blue-500');
-
-            try {
-                await fetch('/api/v1/adherence/log', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        patient_id: 'P_DEMO_001',
-                        log_date: new Date().toISOString().split('T')[0],
-                        took_meds: type === 'meds',
-                        healthy_diet: type === 'diet',
-                        exercised: type === 'exercise'
-                    })
-                });
-
-                const msg = document.getElementById('logMsg');
-                msg.classList.remove('hidden');
-                setTimeout(() => msg.classList.add('hidden'), 3000);
-                fetchAdherenceSummary();
-            } catch (e) { console.error(e); }
-        }
-
-        async function askRagCopilot() {
-            const query = document.getElementById('ragQueryInput').value.trim();
-            if (!query) return;
-
-            document.getElementById('rag-status').innerText = 'Thinking...';
-            document.getElementById('rag-status').className = 'text-[10px] bg-amber-500/20 text-amber-400 animate-pulse px-3 py-1 rounded-full font-bold uppercase transition-all';
-
-            const rawAge = parseInt(document.getElementById('RawAge').value);
-            const patientData = getPatientData();
-            const risk_prob = parseFloat(document.getElementById('riskScore').innerText) / 100 || 0;
-            const risk_tier = document.getElementById('riskTier').innerText.split(' ')[0] || "Unknown";
-
-            try {
-                const ragRes = await fetch('/api/v1/rag/insights', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ bmi: patientData.BMI, age: rawAge, high_bp: patientData.HighBP, high_chol: patientData.HighChol, smoker: patientData.Smoker, phys_activity: patientData.PhysActivity, hvy_alcohol: patientData.HvyAlcoholConsump, ncd_risk_probability: risk_prob, risk_tier: risk_tier, user_query: query })
-                });
-                const rag = await ragRes.json();
-
-                document.getElementById('ragSummary').innerText = rag.analysis_summary;
-                document.getElementById('ragRecommendation').innerText = rag.recommended_action;
-
-                const guidelinesCont = document.getElementById('ragGuidelines'); guidelinesCont.innerHTML = "";
-                rag.clinical_guidelines.forEach(g => guidelinesCont.innerHTML += `<li class="text-xs text-slate-300 leading-relaxed"><span class="text-amber-500 mr-2">✦</span>${g}</li>`);
-
-                const factorsCont = document.getElementById('ragFactors'); factorsCont.innerHTML = "";
-                rag.primary_risk_factors.forEach(f => factorsCont.innerHTML += `<span class="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-[11px] font-bold tracking-wide mr-2 mb-2 inline-block shadow-sm">${f}</span>`);
-
-                document.getElementById('rag-status').innerText = 'Copilot Synced';
-                document.getElementById('rag-status').className = 'text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold uppercase transition-all';
-                document.getElementById('ragQueryInput').value = ""; // Clear input
-            } catch (e) {
-                console.error("Copilot Error:", e);
-                document.getElementById('rag-status').innerText = 'Error';
-            }
         }
 
         // ── Behavioral Simulator ──────────────────────────────
@@ -1046,18 +854,11 @@
             };
 
             recognition.onerror = function (event) {
+                console.error("Speech recognition error", event.error);
+                resetVoiceUI();
                 if (event.error !== 'no-speech') {
-                    console.error("Speech recognition error:", event.error);
-                    alert("Microphone error (" + event.error + "). Please ensure your browser has microphone permissions configured correctly.");
-                } else {
-                    console.warn("Speech recognition timed out (no audio detected).");
-                    console.error("Speech recognition error:", event.error);
-                    alert("Microphone error (" + event.error + "). Please ensure your browser has microphone permissions configured correctly.");
-                } else {
-                    console.warn("Speech recognition timed out (no audio detected).");
+                    alert("Microphone error (" + event.error + "). Please ensure your browser has microphone permissions.");
                 }
-                resetVoiceUI();
-                resetVoiceUI();
             };
 
             recognition.onend = function () {
@@ -1068,8 +869,6 @@
 
             recognition.onresult = async function (event) {
                 const transcript = event.results[0][0].transcript;
-                console.log("Transcription Received:", transcript);
-                console.log("Transcription Received:", transcript);
 
                 // Show processing state
                 document.getElementById('voiceText').innerText = "Processing...";
@@ -1087,8 +886,6 @@
                     if (!response.ok) throw new Error("Voice processing failed on backend");
 
                     const data = await response.json();
-                    console.log("Health Agent Response Data:", data);
-                    console.log("Health Agent Response Data:", data);
 
                     // 1. Auto-fill the form with exact structured clinical data from LLM
                     document.getElementById('RawAge').value = (data.structured_data.Age * 5) + 18 || 50;
