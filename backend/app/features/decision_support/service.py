@@ -4,15 +4,24 @@ from app.core.config import settings
 from .schemas import PatientClinicalData, ClinicalProtocolOutput
 from app.core.llm_agent import llm
 
+from app.features.adherence_monitor.service import adherence_service
+
 class DecisionSupportService:
     def __init__(self):
         self.client = Groq(api_key=settings.GROQ_API_KEY)
         self.model = settings.GROQ_MODEL
 
     def generate_protocol(self, data: PatientClinicalData) -> ClinicalProtocolOutput:
+        # Fetch adherence context for the patient
+        adherence = adherence_service.get_patient_summary(data.patient_id)
+        adherence_context = f"Patient Adherence Index: {adherence.adherence_index}% (Status: {adherence.current_status})."
+
         prompt = f"""
         You are CareFlow AI, a clinical decision support AI.
         Generate a strictly formatted JSON medical protocol for this patient.
+        
+        {adherence_context}
+        NOTE: If adherence is < 50%, prioritize 'Urgent Home Visit' and 'Social Worker Referral' in your steps.
         
         Patient Data:
         Age/Gender: {data.age} {data.gender}

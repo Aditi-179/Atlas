@@ -14,6 +14,7 @@ from app.features.mobile_api.router import router as mobile_api_router
 from app.features.behavioral_sim.router import router as behavioral_sim_router
 from app.features.digital_twin.router import router as digital_twin_router
 from app.features.health_agent.router import router as health_agent_router
+from app.features.adherence_monitor.router import router as adherence_router
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
@@ -83,6 +84,12 @@ app.include_router(
     health_agent_router,
     prefix=f"{settings.API_V1_STR}/health-agent",
     tags=["Health Agent Voice Assistant"]
+)
+
+app.include_router(
+    adherence_router,
+    prefix=f"{settings.API_V1_STR}/adherence",
+    tags=["Adherence Monitoring"]
 )
 
 @app.get("/health", tags=["System"])
