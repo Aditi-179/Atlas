@@ -54,11 +54,6 @@
 | **`population_health`** | `GET /api/v1/population-health/raw-stats` | Serves the full 1000-patient demo CSV as structured JSON (27 fields per record) |
 | **`auth`** | `POST /api/v1/auth/register` · `POST /api/v1/auth/login` | JWT token-based authentication; roles: `worker` / `patient` |
 | **`mobile_api`** | `GET /api/v1/mobile/worker/patients` · `POST /api/v1/mobile/.../update` · `GET /api/v1/mobile/patient/me` | Protected Bearer-token endpoints for health workers and patients |
-| **`adherence_monitor`** | *(In development)* | Tracks medication and care plan adherence over time |
-| **`behavioral_sim`** | *(In development)* | Simulates behavior change outcomes for intervention planning |
-| **`bias_auditor`** | *(In development)* | Audits model predictions for demographic bias |
-| **`digital_twin`** | *(In development)* | Patient digital twin for longitudinal health trajectory simulation |
-| **`health_agent`** | *(In development)* | Autonomous AI health agent for proactive outreach scheduling |
 
 ---
 
