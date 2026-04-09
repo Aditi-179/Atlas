@@ -16,6 +16,17 @@ class PatientHealthData(BaseModel):
     # The output from the XGBoost model
     ncd_risk_probability: float = Field(..., description="Probability of Non-Communicable Disease")
     risk_tier: str = Field(..., description="Risk Tier (e.g., High, Medium, Low)")
+
+    # Rich patient context for LLM personalization
+    patient_name: Optional[str] = Field(default=None, description="Patient's full name")
+    blood_pressure_systolic: Optional[int] = Field(default=None, description="Systolic blood pressure (mmHg)")
+    blood_pressure_diastolic: Optional[int] = Field(default=None, description="Diastolic blood pressure (mmHg)")
+    blood_sugar: Optional[float] = Field(default=None, description="Blood sugar level (mg/dL)")
+    physical_activity_minutes: Optional[int] = Field(default=None, description="Physical activity (min/week)")
+    primary_risk_factor: Optional[str] = Field(default=None, description="Primary identified risk factor")
+    top_risk_contributors: Optional[str] = Field(default=None, description="JSON-serialized SHAP contributors list")
+
+    # Optional copilot question to tailor the LLM response
     user_query: Optional[str] = Field(default=None, description="Optional custom prompt to query the copilot")
 
 

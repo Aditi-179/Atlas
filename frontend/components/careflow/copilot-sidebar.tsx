@@ -190,8 +190,9 @@ export function CopilotSidebar({
       let citations: GuidelineEntry[] = []
 
       try {
-        // --- Real RAG API call ---
+        // --- Real RAG API call — passes user question + full patient context ---
         const ragResult = await api.generateRagInsights({
+          // Core health metrics
           bmi: patient?.vitals.bmi.value ?? 25,
           age: patient?.age ?? 40,
           high_bp: (patient?.vitals.bloodPressure.systolic ?? 0) >= 130 ? 1 : 0,
@@ -202,22 +203,60 @@ export function CopilotSidebar({
             (f) => f.feature.toLowerCase().includes("smok") && f.value > 0
           ) ? 1 : 0,
           phys_activity: (patient?.vitals.physicalActivity.value ?? 0) >= 90 ? 1 : 0,
-          hvy_alcohol: 0,
+          hvy_alcohol: patient?.shapFeatures.some(
+            (f) => f.feature.toLowerCase().includes("alcohol") && f.value > 0
+          ) ? 1 : 0,
           ncd_risk_probability: (patient?.riskScore ?? 50) / 100,
           risk_tier:
             patient?.riskLevel === "critical" ? "High"
             : patient?.riskLevel === "warning" ? "Medium"
             : "Low",
+
+          // Rich patient context so the LLM can personalize the response
+          patient_name: patient?.name ?? undefined,
+          blood_pressure_systolic: patient?.vitals.bloodPressure.systolic ?? undefined,
+          blood_pressure_diastolic: patient?.vitals.bloodPressure.diastolic ?? undefined,
+          blood_sugar: patient?.vitals.bloodSugar.value ?? undefined,
+          physical_activity_minutes: patient?.vitals.physicalActivity.value ?? undefined,
+          primary_risk_factor: patient?.primaryRiskFactor ?? undefined,
+          top_risk_contributors: patient?.shapFeatures
+            ? JSON.stringify(
+                patient.shapFeatures.slice(0, 5).map((f) => ({
+                  feature: f.feature,
+                  rawValue: f.rawValue,
+                  impact: f.value,
+                }))
+              )
+            : undefined,
+
+          // The actual question the clinician typed — THIS is what was missing
+          user_query: text.trim(),
         })
 
-        // Format RAGInsightResponse into a readable message
-        const factors = ragResult.primary_risk_factors.map((f) => `• ${f}`).join("\n")
-        const guidelines = ragResult.clinical_guidelines.map((g) => `• ${g}`).join("\n")
-        responseText =
-          `${ragResult.analysis_summary}` +
-          (factors ? `\n\n**Primary Risk Factors:**\n${factors}` : "") +
-          (guidelines ? `\n\n**Clinical Guidelines:**\n${guidelines}` : "") +
-          `\n\n**Recommended Action:** ${ragResult.recommended_action}`
+        // Format RAGInsightResponse into a readable message.
+        // When the user asked a specific question, analysis_summary IS the full answer —
+        // so render it cleanly with just the recommended action appended.
+        // For generic overviews (no query), render the full structured layout.
+        const isSpecificQuestion = !!text.trim()
+        if (isSpecificQuestion) {
+          // analysis_summary contains the full answer (e.g. diet plan, care plan, etc.)
+          // clinical_guidelines holds extra supporting steps — show them inline if present
+          const steps = ragResult.clinical_guidelines.length > 0
+            ? `\n\n**Key Points:**\n` + ragResult.clinical_guidelines.map((g) => `• ${g}`).join("\n")
+            : ""
+          responseText =
+            `${ragResult.analysis_summary}` +
+            steps +
+            `\n\n**Next Step:** ${ragResult.recommended_action}`
+        } else {
+          const factors = ragResult.primary_risk_factors.map((f) => `• ${f}`).join("\n")
+          const guidelines = ragResult.clinical_guidelines.map((g) => `• ${g}`).join("\n")
+          responseText =
+            `${ragResult.analysis_summary}` +
+            (factors ? `\n\n**Primary Risk Factors:**\n${factors}` : "") +
+            (guidelines ? `\n\n**Clinical Guidelines:**\n${guidelines}` : "") +
+            `\n\n**Recommended Action:** ${ragResult.recommended_action}`
+        }
 
         // Pull local citations for enrichment
         citations = retrieveGuidelines(

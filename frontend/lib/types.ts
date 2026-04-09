@@ -57,6 +57,7 @@ export interface ClinicalProtocolOutput {
 // RAG NLP INTEGRATION TYPES
 // ==========================================
 export interface RAGPatientHealthData {
+  // Core health metrics
   bmi: number;
   age: number;
   high_bp: number;
@@ -66,6 +67,18 @@ export interface RAGPatientHealthData {
   hvy_alcohol: number;
   ncd_risk_probability: number;
   risk_tier: string;
+
+  // Rich patient context for LLM personalization
+  patient_name?: string;
+  blood_pressure_systolic?: number;
+  blood_pressure_diastolic?: number;
+  blood_sugar?: number;
+  physical_activity_minutes?: number;
+  primary_risk_factor?: string;
+  top_risk_contributors?: string;   // JSON-serialized array of { feature, rawValue, value }
+
+  // The live user question from the copilot chat
+  user_query?: string;
 }
 
 export interface RAGInsightResponse {
