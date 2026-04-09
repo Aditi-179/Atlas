@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/careflow/app-sidebar"
 import { CopilotSidebar } from "@/components/careflow/copilot-sidebar"
+import { RouteProgressBar } from "@/components/careflow/route-progress-bar"
 import { Button } from "@/components/ui/button"
 import { Brain } from "lucide-react"
 import { useAppContext } from "@/lib/context"
@@ -22,6 +23,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex h-screen bg-background overflow-hidden w-full">
+      {/* Route change progress bar — shows on every navigation */}
+      <RouteProgressBar />
+
       {/* Left Sidebar */}
       <AppSidebar />
 
